@@ -15,10 +15,9 @@ ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 
 from models.common import DetectMultiBackend
 from utils.datasets import LoadImages, LoadStreams
-from utils.general import (LOGGER, check_img_size, check_imshow, check_requirements, colorstr, increment_path,
+from utils.general import (LOGGER, check_imshow, check_requirements, colorstr, increment_path,
                            non_max_suppression, print_args, scale_coords, xyxy2xywh)
 from utils.plots import Annotator, colors, save_one_box
-from utils.torch_utils import select_device
 
 
 @torch.no_grad()
@@ -29,7 +28,6 @@ def run(weights=ROOT / 'yolov5s.pt',  # model.pt path(s)
         conf_thres=0.25,  # confidence threshold
         iou_thres=0.45,  # NMS IOU threshold
         max_det=1000,  # maximum detections per image
-        device='',  # cuda device, i.e. 0 or 0,1,2,3 or cpu
         view_img=False,  # show results
         save_txt=False,  # save results to *.txt
         save_conf=False,  # save confidences in --save-txt labels
@@ -53,11 +51,9 @@ def run(weights=ROOT / 'yolov5s.pt',  # model.pt path(s)
     (save_dir / 'labels' if save_txt else save_dir).mkdir(parents=True, exist_ok=True)  # make dir
 
     # Load model
-    device = select_device(device)
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = DetectMultiBackend(weights, device=device, data=data)
     stride, names, pt = model.stride, model.names, model.pt
-
-    imgsz = check_img_size(imgsz, s=stride)  # check image size
 
     # Dataloader
     if webcam:
