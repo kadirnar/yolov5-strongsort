@@ -2,11 +2,9 @@ import argparse
 import os
 import sys
 from pathlib import Path
-
 import cv2
 import torch
 import torch.backends.cudnn as cudnn
-
 from models.common import DetectMultiBackend
 from utils.datasets import LoadImages, LoadStreams
 from utils.general import (LOGGER, check_imshow, colorstr, increment_path,
@@ -63,6 +61,7 @@ def run(weights=ROOT / 'yolov5s.pt',  # model.pt path(s)
         print("viwe_img:", view_img)
         cudnn.benchmark = True  # set True to speed up constant image size inference
         dataset = LoadStreams(source, img_size=imgsz, stride=stride, auto=pt)
+        print("dataset:", dataset)
         bs = len(dataset)  # batch_size
     else:
         dataset = LoadImages(source, img_size=imgsz, stride=stride, auto=pt)
