@@ -14,11 +14,6 @@ import torch.nn.functional as F
 
 from utils.general import LOGGER
 
-try:
-    import thop  # for FLOPs computation
-except ImportError:
-    thop = None
-
 
 @contextmanager
 def torch_distributed_zero_first(local_rank: int):
@@ -88,37 +83,6 @@ def select_device(device='', batch_size=0, newline=True):
     return torch.device('cuda:0' if cuda else 'cpu')
 
 
-def profile(input, ops, n=10, device=None):
-    results = []
-    device = device or select_device()
-    print(f"{'Params':>12s}{'GFLOPs':>12s}{'GPU_mem (GB)':>14s}{'forward (ms)':>14s}{'backward (ms)':>14s}"
-          f"{'input':>24s}{'output':>24s}")
-
-    for x in input if isinstance(input, list) else [input]:
-        x = x.to(device)
-        x.requires_grad = True
-        for m in ops if isinstance(ops, list) else [ops]:
-            m = m.to(device) if hasattr(m, 'to') else m  # device
-            m = m.half() if hasattr(m, 'half') and isinstance(x, torch.Tensor) and x.dtype is torch.float16 else m
-            tf, tb, t = 0, 0, [0, 0, 0]  # dt forward, backward
-            try:
-                flops = thop.profile(m, inputs=(x,), verbose=False)[0] / 1E9 * 2  # GFLOPs
-            except Exception:
-                flops = 0
-            try:
-                mem = torch.cuda.memory_reserved() / 1E9 if torch.cuda.is_available() else 0  # (GB)
-                s_in = tuple(x.shape) if isinstance(x, torch.Tensor) else 'list'
-                s_out = tuple(y.shape) if isinstance(y, torch.Tensor) else 'list'
-                p = sum(list(x.numel() for x in m.parameters())) if isinstance(m, nn.Module) else 0  # parameters
-                print(f'{p:12}{flops:12.4g}{mem:>14.3f}{tf:14.4g}{tb:14.4g}{str(s_in):>24s}{str(s_out):>24s}')
-                results.append([p, flops, mem, tf, tb, s_in, s_out])
-            except Exception as e:
-                print(e)
-                results.append(None)
-            torch.cuda.empty_cache()
-    return results
-
-
 def is_parallel(model):
     # Returns True if model is of type DP or DDP
     return type(model) in (nn.parallel.DataParallel, nn.parallel.DistributedDataParallel)
@@ -144,26 +108,6 @@ def initialize_weights(model):
 def find_modules(model, mclass=nn.Conv2d):
     # Finds layer indices matching module class 'mclass'
     return [i for i, m in enumerate(model.module_list) if isinstance(m, mclass)]
-
-
-def sparsity(model):
-    # Return global model sparsity
-    a, b = 0, 0
-    for p in model.parameters():
-        a += p.numel()
-        b += (p == 0).sum()
-    return b / a
-
-
-def prune(model, amount=0.3):
-    # Prune model to requested global sparsity
-    import torch.nn.utils.prune as prune
-    print('Pruning model... ', end='')
-    for name, m in model.named_modules():
-        if isinstance(m, nn.Conv2d):
-            prune.l1_unstructured(m, name='weight', amount=amount)  # prune
-            prune.remove(m, 'weight')  # make permanent
-    print(' %.3g global sparsity' % sparsity(model))
 
 
 def fuse_conv_and_bn(conv, bn):
@@ -233,63 +177,3 @@ def copy_attr(a, b, include=(), exclude=()):
             continue
         else:
             setattr(a, k, v)
-
-
-class EarlyStopping:
-    # YOLOv5 simple early stopper
-    def __init__(self, patience=30):
-        self.best_fitness = 0.0  # i.e. mAP
-        self.best_epoch = 0
-        self.patience = patience or float('inf')  # epochs to wait after fitness stops improving to stop
-        self.possible_stop = False  # possible stop may occur next epoch
-
-    def __call__(self, epoch, fitness):
-        if fitness >= self.best_fitness:  # >= 0 to allow for early zero-fitness stage of training
-            self.best_epoch = epoch
-            self.best_fitness = fitness
-        delta = epoch - self.best_epoch  # epochs without improvement
-        self.possible_stop = delta >= (self.patience - 1)  # possible stop may occur next epoch
-        stop = delta >= self.patience  # stop training if patience exceeded
-        if stop:
-            LOGGER.info(f'Stopping training early as no improvement observed in last {self.patience} epochs. '
-                        f'Best results observed at epoch {self.best_epoch}, best model saved as best.pt.\n'
-                        f'To update EarlyStopping(patience={self.patience}) pass a new patience value, '
-                        f'i.e. `python train.py --patience 300` or use `--patience 0` to disable EarlyStopping.')
-        return stop
-
-
-class ModelEMA:
-    """ Model Exponential Moving Average from https://github.com/rwightman/pytorch-image-models
-    Keep a moving average of everything in the model state_dict (parameters and buffers).
-    This is intended to allow functionality like
-    https://www.tensorflow.org/api_docs/python/tf/train/ExponentialMovingAverage
-    A smoothed version of the weights is necessary for some training schemes to perform well.
-    This class is sensitive where it is initialized in the sequence of model init,
-    GPU assignment and distributed training wrappers.
-    """
-
-    def __init__(self, model, decay=0.9999, updates=0):
-        # Create EMA
-        self.ema = deepcopy(de_parallel(model)).eval()  # FP32 EMA
-        # if next(model.parameters()).device.type != 'cpu':
-        #     self.ema.half()  # FP16 EMA
-        self.updates = updates  # number of EMA updates
-        self.decay = lambda x: decay * (1 - math.exp(-x / 2000))  # decay exponential ramp (to help early epochs)
-        for p in self.ema.parameters():
-            p.requires_grad_(False)
-
-    def update(self, model):
-        # Update EMA parameters
-        with torch.no_grad():
-            self.updates += 1
-            d = self.decay(self.updates)
-
-            msd = de_parallel(model).state_dict()  # model state_dict
-            for k, v in self.ema.state_dict().items():
-                if v.dtype.is_floating_point:
-                    v *= d
-                    v += (1 - d) * msd[k].detach()
-
-    def update_attr(self, model, include=(), exclude=('process_group', 'reducer')):
-        # Update EMA attributes
-        copy_attr(self.ema, model, include, exclude)
