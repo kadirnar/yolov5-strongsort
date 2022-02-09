@@ -7,17 +7,18 @@ import cv2
 import torch
 import torch.backends.cudnn as cudnn
 
+from models.common import DetectMultiBackend
+from utils.datasets import LoadImages, LoadStreams
+from utils.general import (LOGGER, check_imshow, colorstr, increment_path,
+                           non_max_suppression, print_args, scale_coords, xyxy2xywh)
+from utils.plots import Annotator, colors, save_one_box
+from utils.torch_utils import select_device
+
 FILE = Path(__file__).resolve()
 ROOT = FILE.parents[0]  # YOLOv5 root directory
 if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))  # add ROOT to PATH
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
-
-from models.common import DetectMultiBackend
-from utils.datasets import LoadImages, LoadStreams
-from utils.general import (LOGGER, check_imshow, check_requirements, colorstr, increment_path,
-                           non_max_suppression, print_args, scale_coords, xyxy2xywh)
-from utils.plots import Annotator, colors, save_one_box
 
 
 @torch.no_grad()
@@ -28,6 +29,7 @@ def run(weights=ROOT / 'yolov5s.pt',  # model.pt path(s)
         conf_thres=0.25,  # confidence threshold
         iou_thres=0.45,  # NMS IOU threshold
         max_det=1000,  # maximum detections per image
+        device='',  # cuda device, i.e. 0 or 0,1,2,3 or cpu
         view_img=False,  # show results
         save_txt=False,  # save results to *.txt
         save_conf=False,  # save confidences in --save-txt labels
@@ -51,13 +53,14 @@ def run(weights=ROOT / 'yolov5s.pt',  # model.pt path(s)
     (save_dir / 'labels' if save_txt else save_dir).mkdir(parents=True, exist_ok=True)  # make dir
 
     # Load model
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device = select_device(device)
     model = DetectMultiBackend(weights, device=device, data=data)
     stride, names, pt = model.stride, model.names, model.pt
 
     # Dataloader
     if webcam:
         view_img = check_imshow()
+        print("viwe_img:", view_img)
         cudnn.benchmark = True  # set True to speed up constant image size inference
         dataset = LoadStreams(source, img_size=imgsz, stride=stride, auto=pt)
         bs = len(dataset)  # batch_size
@@ -152,8 +155,6 @@ def run(weights=ROOT / 'yolov5s.pt',  # model.pt path(s)
         # Print time (inference-only)
 
     # Print results
-    t = tuple(x / seen * 1E3 for x in dt)  # speeds per image
-    LOGGER.info(f'Speed: %.1fms pre-process, %.1fms inference, %.1fms NMS per image at shape {(1, 3, *imgsz)}' % t)
     if save_txt or save_img:
         s = f"\n{len(list(save_dir.glob('labels/*.txt')))} labels saved to {save_dir / 'labels'}" if save_txt else ''
         LOGGER.info(f"Results saved to {colorstr('bold', save_dir)}{s}")
@@ -189,7 +190,6 @@ def parse_opt():
 
 
 def main(opt):
-    check_requirements(exclude=('tensorboard', 'thop'))
     run(**vars(opt))
 
 
