@@ -2,9 +2,11 @@ import argparse
 import os
 import sys
 from pathlib import Path
+
 import cv2
 import torch
 import torch.backends.cudnn as cudnn
+
 from models.common import DetectMultiBackend
 from utils.datasets import LoadImages, LoadStreams
 from utils.general import (LOGGER, check_imshow, colorstr, increment_path,
@@ -58,10 +60,8 @@ def run(weights=ROOT / 'yolov5s.pt',  # model.pt path(s)
     # Dataloader
     if webcam:
         view_img = check_imshow()
-        print("viwe_img:", view_img)
         cudnn.benchmark = True  # set True to speed up constant image size inference
         dataset = LoadStreams(source, img_size=imgsz, stride=stride, auto=pt)
-        print("dataset:", dataset)
         bs = len(dataset)  # batch_size
     else:
         dataset = LoadImages(source, img_size=imgsz, stride=stride, auto=pt)
@@ -82,9 +82,6 @@ def run(weights=ROOT / 'yolov5s.pt',  # model.pt path(s)
 
         # NMS
         pred = non_max_suppression(pred, conf_thres, iou_thres, classes, agnostic_nms, max_det=max_det)
-
-        # Second-stage classifier (optional)
-        # pred = utils.general.apply_classifier(pred, classifier_model, im, im0s)
 
         # Process predictions
         for i, det in enumerate(pred):  # per image
@@ -130,7 +127,6 @@ def run(weights=ROOT / 'yolov5s.pt',  # model.pt path(s)
             im0 = annotator.result()
             if view_img:
                 cv2.imshow(str(p), im0)
-                cv2.waitKey(0)  # 1 millisecond
 
             # Save results (image with detections)
             if save_img:
