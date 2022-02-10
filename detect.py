@@ -7,7 +7,7 @@ import torch
 import torch.backends.cudnn as cudnn
 from models.common import DetectMultiBackend
 from utils.datasets import LoadImages, LoadStreams
-from utils.general import (LOGGER, check_imshow, colorstr, increment_path,
+from utils.general import (LOGGER, colorstr, increment_path,
                            non_max_suppression, print_args, scale_coords, xyxy2xywh)
 from utils.plots import Annotator, colors, save_one_box
 from utils.torch_utils import select_device
