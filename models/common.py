@@ -290,7 +290,7 @@ class DetectMultiBackend(nn.Module):
         #   ONNX Runtime:           *.onnx
         #   OpenCV DNN:             *.onnx with dnn=True
         #   TensorRT:               *.engine
-        from models.experimental import attempt_download, attempt_load  # scoped to avoid circular import
+        from models.experimental import attempt_load  # scoped to avoid circular import
 
         super().__init__()
         w = str(weights[0] if isinstance(weights, list) else weights)
@@ -299,7 +299,6 @@ class DetectMultiBackend(nn.Module):
         check_suffix(w, suffixes)  # check weights have acceptable suffix
         pt, jit, onnx, engine, tflite, pb, saved_model, coreml, xml = (suffix == x for x in suffixes)  # backends
         stride, names = 64, [f'class{i}' for i in range(1000)]  # assign defaults
-        w = attempt_download(w)  # download if not local
         if data:  # data.yaml path (optional)
             with open(data, errors='ignore') as f:
                 names = yaml.safe_load(f)['names']  # class names

@@ -1,8 +1,3 @@
-# YOLOv5 🚀 by Ultralytics, GPL-3.0 license
-"""
-Dataloaders and dataset utils
-"""
-
 import glob
 import math
 import os
@@ -18,7 +13,6 @@ from utils.augmentations import letterbox
 from utils.general import (LOGGER, check_requirements, clean_str)
 
 # Parameters
-HELP_URL = 'https://github.com/ultralytics/yolov5/wiki/Train-Custom-Data'
 IMG_FORMATS = ['bmp', 'dng', 'jpeg', 'jpg', 'mpo', 'png', 'tif', 'tiff', 'webp']  # include image suffixes
 VID_FORMATS = ['asf', 'avi', 'gif', 'm4v', 'mkv', 'mov', 'mp4', 'mpeg', 'mpg', 'wmv']  # include video suffixes
 
