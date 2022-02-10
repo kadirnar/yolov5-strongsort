@@ -288,7 +288,7 @@ if __name__ == '__main__':
     parser.add_argument('--profile', action='store_true', help='profile model speed')
     parser.add_argument('--test', action='store_true', help='test all yolo*.yaml')
     opt = parser.parse_args()
-    opt.cfg = check_yaml(opt.cfg)  # check YAML
+    opt.cfg = opt.cfg  # check YAML
     print_args(FILE.stem, opt)
     device = select_device(opt.device)
 
@@ -308,9 +308,3 @@ if __name__ == '__main__':
                 _ = Model(cfg)
             except Exception as e:
                 print(f'Error in {cfg}: {e}')
-
-    # Tensorboard (not working https://github.com/ultralytics/yolov5/issues/2898)
-    # from torch.utils.tensorboard import SummaryWriter
-    # tb_writer = SummaryWriter('.')
-    # LOGGER.info("Run 'tensorboard --logdir=models' to view tensorboard at http://localhost:6006/")
-    # tb_writer.add_graph(torch.jit.trace(model, img, strict=False), [])  # add model graph
