@@ -22,9 +22,9 @@ from PIL import Image
 from torch.cuda import amp
 
 from utils.datasets import exif_transpose, letterbox
-from utils.general import (LOGGER, check_requirements, check_suffix, check_version, colorstr, increment_path,
+from utils.general import (LOGGER, colorstr, increment_path,
                            make_divisible, non_max_suppression, scale_coords, xywh2xyxy, xyxy2xywh)
-from utils.plots import Annotator, colors, save_one_box
+from utils.plots import colors, save_one_box
 from utils.torch_utils import copy_attr
 
 
@@ -296,7 +296,6 @@ class DetectMultiBackend(nn.Module):
         w = str(weights[0] if isinstance(weights, list) else weights)
         suffix = Path(w).suffix.lower()
         suffixes = ['.pt', '.torchscript', '.onnx', '.engine', '.tflite', '.pb', '', '.mlmodel', '.xml']
-        check_suffix(w, suffixes)  # check weights have acceptable suffix
         pt, jit, onnx, engine, tflite, pb, saved_model, coreml, xml = (suffix == x for x in suffixes)  # backends
         stride, names = 64, [f'class{i}' for i in range(1000)]  # assign defaults
         if data:  # data.yaml path (optional)

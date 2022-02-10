@@ -1,13 +1,7 @@
-# YOLOv5 🚀 by Ultralytics, GPL-3.0 license
-"""
-Plotting utils
-"""
-
 import math
 import os
 from copy import copy
 from pathlib import Path
-
 import cv2
 import matplotlib
 import matplotlib.pyplot as plt
@@ -15,10 +9,9 @@ import numpy as np
 import pandas as pd
 import seaborn as sn
 import torch
-from PIL import Image, ImageDraw, ImageFont
-
-from utils.general import (CONFIG_DIR, FONT, LOGGER, Timeout, check_font, check_requirements, clip_coords,
-                           increment_path, is_ascii, is_chinese, try_except, xywh2xyxy, xyxy2xywh)
+from PIL import Image, ImageDraw
+from utils.general import (LOGGER, Timeout, clip_coords,
+                           increment_path, is_ascii, try_except, xywh2xyxy, xyxy2xywh)
 from utils.metrics import fitness
 
 # Settings
@@ -48,33 +41,15 @@ class Colors:
 colors = Colors()  # create instance for 'from utils.plots import colors'
 
 
-def check_pil_font(font=FONT, size=10):
-    # Return a PIL TrueType Font, downloading to CONFIG_DIR if necessary
-    font = Path(font)
-    font = font if font.exists() else (CONFIG_DIR / font.name)
-    try:
-        return ImageFont.truetype(str(font) if font.exists() else font.name, size)
-    except Exception:  # download if missing
-        check_font(font)
-        try:
-            return ImageFont.truetype(str(font), size)
-        except TypeError:
-            check_requirements('Pillow>=8.4.0')  # known issue https://github.com/ultralytics/yolov5/issues/5374
-
-
 class Annotator:
-    if RANK in (-1, 0):
-        check_pil_font()  # download TTF if necessary
-
     # YOLOv5 Annotator for train/val mosaics and jpgs and detect/hub inference annotations
     def __init__(self, im, line_width=None, font_size=None, font='Arial.ttf', pil=False, example='abc'):
         assert im.data.contiguous, 'Image not contiguous. Apply np.ascontiguousarray(im) to Annotator() input images.'
-        self.pil = pil or not is_ascii(example) or is_chinese(example)
+        self.pil = pil or not is_ascii(example)
         if self.pil:  # use PIL
             self.im = im if isinstance(im, Image.Image) else Image.fromarray(im)
             self.draw = ImageDraw.Draw(self.im)
-            self.font = check_pil_font(font='Arial.Unicode.ttf' if is_chinese(example) else font,
-                                       size=font_size or max(round(sum(self.im.size) / 2 * 0.035), 12))
+            self.font = font
         else:  # use cv2
             self.im = im
         self.lw = line_width or max(round(sum(im.shape) / 2 * 0.003), 2)  # line width

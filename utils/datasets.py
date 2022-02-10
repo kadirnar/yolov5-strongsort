@@ -10,7 +10,7 @@ import numpy as np
 from PIL import ExifTags, Image
 from torch.utils.data import Dataset
 from utils.augmentations import letterbox
-from utils.general import (LOGGER, check_requirements, clean_str)
+from utils.general import (LOGGER, clean_str)
 
 # Parameters
 IMG_FORMATS = ['bmp', 'dng', 'jpeg', 'jpg', 'mpo', 'png', 'tif', 'tiff', 'webp']  # include image suffixes
