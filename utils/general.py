@@ -1,10 +1,8 @@
-import contextlib
 import glob
 import logging
 import math
 import os
 import re
-import signal
 import time
 from pathlib import Path
 import cv2
@@ -12,8 +10,7 @@ import numpy as np
 import pandas as pd
 import torch
 import torchvision
-import yaml
-from utils.metrics import box_iou, fitness
+from utils.metrics import box_iou
 
 # Settings
 FILE = Path(__file__).resolve()
@@ -37,37 +34,6 @@ def set_logging(name=None, verbose=VERBOSE):
 
 
 LOGGER = set_logging('yolov5')  # define globally (used in train.py, val.py, detect.py, etc.)
-
-
-class Timeout(contextlib.ContextDecorator):
-    # Usage: @Timeout(seconds) decorator or 'with Timeout(seconds):' context manager
-    def __init__(self, seconds, *, timeout_msg='', suppress_timeout_errors=True):
-        self.seconds = int(seconds)
-        self.timeout_message = timeout_msg
-        self.suppress = bool(suppress_timeout_errors)
-
-    def _timeout_handler(self, signum, frame):
-        raise TimeoutError(self.timeout_message)
-
-    def __enter__(self):
-        signal.signal(signal.SIGALRM, self._timeout_handler)  # Set handler for SIGALRM
-        signal.alarm(self.seconds)  # start countdown for SIGALRM to be raised
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        signal.alarm(0)  # Cancel SIGALRM if it's scheduled
-        if self.suppress and exc_type is TimeoutError:  # Suppress TimeoutError
-            return True
-
-
-def try_except(func):
-    # try-except function. Usage: @try_except decorator
-    def handler(*args, **kwargs):
-        try:
-            func(*args, **kwargs)
-        except Exception as e:
-            print(e)
-
-    return handler
 
 
 def print_args(name, opt):
@@ -273,3 +239,16 @@ def increment_path(path, exist_ok=False, sep='', mkdir=False):
     if mkdir:
         path.mkdir(parents=True, exist_ok=True)  # make directory
     return path
+
+
+def check_imshow():
+    # Check if environment supports image displays
+    try:
+        cv2.imshow('test', np.zeros((1, 1, 3)))
+        cv2.waitKey(1)
+        cv2.destroyAllWindows()
+        cv2.waitKey(1)
+        return True
+    except Exception as e:
+        LOGGER.warning(f'WARNING: Environment does not support cv2.imshow() or PIL Image.show() image displays\n{e}')
+        return False
