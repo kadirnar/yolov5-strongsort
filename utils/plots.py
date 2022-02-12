@@ -1,12 +1,14 @@
 import math
 import os
 from pathlib import Path
+
 import cv2
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
 from PIL import Image, ImageDraw
+
 from utils.general import (LOGGER, clip_coords,
                            increment_path, is_ascii, xywh2xyxy, xyxy2xywh)
 
@@ -15,22 +17,21 @@ RANK = int(os.getenv('RANK', -1))
 matplotlib.rc('font', **{'size': 11})
 matplotlib.use('Agg')  # for writing to files only
 
+
 class Annotator:
     if RANK in (-1, 0):
-        check_pil_font()  # download TTF if necessary
 
-    # YOLOv5 Annotator for train/val mosaics and jpgs and detect/hub inference annotations
-    def __init__(self, im, line_width=None, font_size=None, font='Arial.ttf', pil=False, example='abc'):
-        assert im.data.contiguous, 'Image not contiguous. Apply np.ascontiguousarray(im) to Annotator() input images.'
-        self.pil = pil or not is_ascii(example) or is_chinese(example)
-        if self.pil:  # use PIL
-            self.im = im if isinstance(im, Image.Image) else Image.fromarray(im)
-            self.draw = ImageDraw.Draw(self.im)
-            self.font = check_pil_font(font='Arial.Unicode.ttf' if is_chinese(example) else font,
-                                       size=font_size or max(round(sum(self.im.size) / 2 * 0.035), 12))
-        else:  # use cv2
-            self.im = im
-        self.lw = line_width or max(round(sum(im.shape) / 2 * 0.003), 2)  # line width
+        # YOLOv5 Annotator for train/val mosaics and jpgs and detect/hub inference annotations
+        def __init__(self, im, line_width=None, font_size=None, font='Arial.ttf', pil=False, example='abc'):
+            assert im.data.contiguous, 'Image not contiguous. Apply np.ascontiguousarray(im) to Annotator() input images.'
+            self.pil = pil or not is_ascii(example)
+            if self.pil:  # use PIL
+                self.im = im if isinstance(im, Image.Image) else Image.fromarray(im)
+                self.draw = ImageDraw.Draw(self.im)
+
+            else:  # use cv2
+                self.im = im
+            self.lw = line_width or max(round(sum(im.shape) / 2 * 0.003), 2)  # line width
 
     def box_label(self, box, label='', color=(128, 128, 128), txt_color=(255, 255, 255)):
         # Add one xyxy box to image with label
