@@ -3,13 +3,16 @@ import math
 import os
 import platform
 import subprocess
+import time
 from contextlib import contextmanager
 from copy import deepcopy
 from pathlib import Path
+
 import torch
 import torch.distributed as dist
 import torch.nn as nn
 import torch.nn.functional as F
+
 from utils.general import LOGGER
 
 
@@ -175,3 +178,10 @@ def copy_attr(a, b, include=(), exclude=()):
             continue
         else:
             setattr(a, k, v)
+
+
+def time_sync():
+    # pytorch-accurate time
+    if torch.cuda.is_available():
+        torch.cuda.synchronize()
+    return time.time()

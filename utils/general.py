@@ -5,11 +5,13 @@ import os
 import re
 import time
 from pathlib import Path
+
 import cv2
 import numpy as np
 import pandas as pd
 import torch
 import torchvision
+
 from utils.metrics import box_iou
 
 # Settings
@@ -252,3 +254,14 @@ def check_imshow():
     except Exception as e:
         LOGGER.warning(f'WARNING: Environment does not support cv2.imshow() or PIL Image.show() image displays\n{e}')
         return False
+
+
+def check_img_size(imgsz, s=32, floor=0):
+    # Verify image size is a multiple of stride s in each dimension
+    if isinstance(imgsz, int):  # integer i.e. img_size=640
+        new_size = max(make_divisible(imgsz, int(s)), floor)
+    else:  # list i.e. img_size=[640, 480]
+        new_size = [max(make_divisible(x, int(s)), floor) for x in imgsz]
+    if new_size != imgsz:
+        LOGGER.warning(f'WARNING: --img-size {imgsz} must be multiple of max stride {s}, updating to {new_size}')
+    return new_size
