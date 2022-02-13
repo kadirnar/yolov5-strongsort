@@ -1,8 +1,6 @@
 from __future__ import division, print_function, absolute_import
-
 import os.path as osp
 import warnings
-
 from scipy.io import loadmat
 
 from ..dataset import VideoDataset
@@ -51,12 +49,12 @@ class Mars(VideoDataset):
         train_names = self.get_names(self.train_name_path)
         test_names = self.get_names(self.test_name_path)
         track_train = loadmat(self.track_train_info_path
-                              )['track_train_info']  # numpy.ndarray (8298, 4)
+                              )['track_train_info'] # numpy.ndarray (8298, 4)
         track_test = loadmat(self.track_test_info_path
-                             )['track_test_info']  # numpy.ndarray (12180, 4)
+                             )['track_test_info'] # numpy.ndarray (12180, 4)
         query_IDX = loadmat(self.query_IDX_path
-                            )['query_IDX'].squeeze()  # numpy.ndarray (1980,)
-        query_IDX -= 1  # index from 0
+                            )['query_IDX'].squeeze() # numpy.ndarray (1980,)
+        query_IDX -= 1 # index from 0
         track_query = track_test[query_IDX, :]
         gallery_IDX = [
             i for i in range(track_test.shape[0]) if i not in query_IDX
@@ -84,7 +82,7 @@ class Mars(VideoDataset):
         return names
 
     def process_data(
-            self, names, meta_data, home_dir=None, relabel=False, min_seq_len=0
+        self, names, meta_data, home_dir=None, relabel=False, min_seq_len=0
     ):
         assert home_dir in ['bbox_train', 'bbox_test']
         num_tracklets = meta_data.shape[0]
@@ -98,11 +96,11 @@ class Mars(VideoDataset):
             data = meta_data[tracklet_idx, ...]
             start_index, end_index, pid, camid = data
             if pid == -1:
-                continue  # junk images are just ignored
+                continue # junk images are just ignored
             assert 1 <= camid <= 6
             if relabel:
                 pid = pid2label[pid]
-            camid -= 1  # index starts from 0
+            camid -= 1 # index starts from 0
             img_names = names[start_index - 1:end_index]
 
             # make sure image names correspond to the same person

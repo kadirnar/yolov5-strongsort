@@ -1,30 +1,30 @@
 from __future__ import division, print_function, absolute_import
-
 import torch
 from torch.nn import functional as F
+
+from torchreid.utils import open_all_layers, open_specified_layers
 from torchreid.engine import Engine
 from torchreid.losses import TripletLoss, CrossEntropyLoss
-from torchreid.utils import open_all_layers, open_specified_layers
 
 
 class ImageDMLEngine(Engine):
 
     def __init__(
-            self,
-            datamanager,
-            model1,
-            optimizer1,
-            scheduler1,
-            model2,
-            optimizer2,
-            scheduler2,
-            margin=0.3,
-            weight_t=0.5,
-            weight_x=1.,
-            weight_ml=1.,
-            use_gpu=True,
-            label_smooth=True,
-            deploy='model1'
+        self,
+        datamanager,
+        model1,
+        optimizer1,
+        scheduler1,
+        model2,
+        optimizer2,
+        scheduler2,
+        margin=0.3,
+        weight_t=0.5,
+        weight_x=1.,
+        weight_ml=1.,
+        use_gpu=True,
+        label_smooth=True,
+        deploy='model1'
     ):
         super(ImageDMLEngine, self).__init__(datamanager, use_gpu)
 
@@ -111,7 +111,7 @@ class ImageDMLEngine(Engine):
         return -(p * torch.log(q + 1e-8)).sum(1).mean()
 
     def two_stepped_transfer_learning(
-            self, epoch, fixbase_epoch, open_layers, model=None
+        self, epoch, fixbase_epoch, open_layers, model=None
     ):
         """Two stepped transfer learning.
 

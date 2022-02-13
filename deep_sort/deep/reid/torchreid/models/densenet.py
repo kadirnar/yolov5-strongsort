@@ -2,10 +2,8 @@
 Code source: https://github.com/pytorch/vision
 """
 from __future__ import division, absolute_import
-
 import re
 from collections import OrderedDict
-
 import torch
 import torch.nn as nn
 from torch.nn import functional as F
@@ -18,13 +16,13 @@ __all__ = [
 
 model_urls = {
     'densenet121':
-        'https://download.pytorch.org/models/densenet121-a639ec97.pth',
+    'https://download.pytorch.org/models/densenet121-a639ec97.pth',
     'densenet169':
-        'https://download.pytorch.org/models/densenet169-b2777c0a.pth',
+    'https://download.pytorch.org/models/densenet169-b2777c0a.pth',
     'densenet201':
-        'https://download.pytorch.org/models/densenet201-c1103571.pth',
+    'https://download.pytorch.org/models/densenet201-c1103571.pth',
     'densenet161':
-        'https://download.pytorch.org/models/densenet161-8d451a50.pth',
+    'https://download.pytorch.org/models/densenet161-8d451a50.pth',
 }
 
 
@@ -71,15 +69,15 @@ class _DenseLayer(nn.Sequential):
 class _DenseBlock(nn.Sequential):
 
     def __init__(
-            self, num_layers, num_input_features, bn_size, growth_rate, drop_rate
+        self, num_layers, num_input_features, bn_size, growth_rate, drop_rate
     ):
         super(_DenseBlock, self).__init__()
         for i in range(num_layers):
             layer = _DenseLayer(
-                num_input_features + i * growth_rate, growth_rate, bn_size,
+                num_input_features + i*growth_rate, growth_rate, bn_size,
                 drop_rate
             )
-            self.add_module('denselayer%d' % (i + 1), layer)
+            self.add_module('denselayer%d' % (i+1), layer)
 
 
 class _Transition(nn.Sequential):
@@ -116,17 +114,17 @@ class DenseNet(nn.Module):
     """
 
     def __init__(
-            self,
-            num_classes,
-            loss,
-            growth_rate=32,
-            block_config=(6, 12, 24, 16),
-            num_init_features=64,
-            bn_size=4,
-            drop_rate=0,
-            fc_dims=None,
-            dropout_p=None,
-            **kwargs
+        self,
+        num_classes,
+        loss,
+        growth_rate=32,
+        block_config=(6, 12, 24, 16),
+        num_init_features=64,
+        bn_size=4,
+        drop_rate=0,
+        fc_dims=None,
+        dropout_p=None,
+        **kwargs
     ):
 
         super(DenseNet, self).__init__()
@@ -167,14 +165,14 @@ class DenseNet(nn.Module):
                 growth_rate=growth_rate,
                 drop_rate=drop_rate
             )
-            self.features.add_module('denseblock%d' % (i + 1), block)
-            num_features = num_features + num_layers * growth_rate
+            self.features.add_module('denseblock%d' % (i+1), block)
+            num_features = num_features + num_layers*growth_rate
             if i != len(block_config) - 1:
                 trans = _Transition(
                     num_input_features=num_features,
                     num_output_features=num_features // 2
                 )
-                self.features.add_module('transition%d' % (i + 1), trans)
+                self.features.add_module('transition%d' % (i+1), trans)
                 num_features = num_features // 2
 
         # Final batch norm

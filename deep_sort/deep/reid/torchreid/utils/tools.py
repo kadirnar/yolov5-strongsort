@@ -1,16 +1,14 @@
 from __future__ import division, print_function, absolute_import
-
-import errno
-import json
 import os
-import os.path as osp
-import random
 import sys
+import json
 import time
-import warnings
-
-import PIL
+import errno
 import numpy as np
+import random
+import os.path as osp
+import warnings
+import PIL
 import torch
 from PIL import Image
 
@@ -85,11 +83,11 @@ def download_url(url, dst):
             return
         duration = time.time() - start_time
         progress_size = int(count * block_size)
-        speed = int(progress_size / (1024 * duration))
+        speed = int(progress_size / (1024*duration))
         percent = int(count * block_size * 100 / total_size)
         sys.stdout.write(
             '\r...%d%%, %d MB, %d KB/s, %d seconds passed' %
-            (percent, progress_size / (1024 * 1024), speed, duration)
+            (percent, progress_size / (1024*1024), speed, duration)
         )
         sys.stdout.flush()
 
@@ -116,7 +114,7 @@ def read_image(path):
         except IOError:
             print(
                 'IOError incurred when reading "{}". Will redo. Don\'t worry. Just chill.'
-                    .format(path)
+                .format(path)
             )
     return img
 

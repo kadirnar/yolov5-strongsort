@@ -1,22 +1,22 @@
-import argparse
-import copy
-import os.path as osp
 import sys
+import copy
 import time
-
+import os.path as osp
+import argparse
 import torch
 import torch.nn as nn
+
 import torchreid
 from torchreid.utils import (
     Logger, check_isfile, set_random_seed, collect_env_info,
     resume_from_checkpoint, load_pretrained_weights, compute_model_complexity
 )
 
+from dml import ImageDMLEngine
 from default_config import (
     imagedata_kwargs, optimizer_kwargs, engine_run_kwargs, get_default_config,
     lr_scheduler_kwargs
 )
-from dml import ImageDMLEngine
 
 
 def reset_config(cfg, args):

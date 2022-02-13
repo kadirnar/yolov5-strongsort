@@ -1,10 +1,9 @@
 from __future__ import division, print_function, absolute_import
-
 import glob
+import numpy as np
 import os.path as osp
 import zipfile
 
-import numpy as np
 from torchreid.utils import read_json, write_json
 
 from ..dataset import ImageDataset
@@ -47,8 +46,8 @@ class CUHK01(ImageDataset):
         if split_id >= len(splits):
             raise ValueError(
                 'split_id exceeds range, received {}, but expected between 0 and {}'
-                    .format(split_id,
-                            len(splits) - 1)
+                .format(split_id,
+                        len(splits) - 1)
             )
         split = splits[split_id]
 
@@ -83,7 +82,7 @@ class CUHK01(ImageDataset):
             for img_path in img_paths:
                 img_name = osp.basename(img_path)
                 pid = int(img_name[:4]) - 1
-                camid = (int(img_name[4:7]) - 1) // 2  # result is either 0 or 1
+                camid = (int(img_name[4:7]) - 1) // 2 # result is either 0 or 1
                 img_list.append((img_path, pid, camid))
                 pid_container.add(pid)
 

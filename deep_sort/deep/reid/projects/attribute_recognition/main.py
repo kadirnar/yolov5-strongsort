@@ -1,28 +1,27 @@
 from __future__ import division, print_function
-
-import copy
-import datetime
-import os.path as osp
 import sys
+import copy
 import time
-import warnings
-
 import numpy as np
+import os.path as osp
+import datetime
+import warnings
 import torch
 import torch.nn as nn
+
 import torchreid
-from torchreid.data.transforms import (
-    Resize, Compose, ToTensor, Normalize, Random2DTranslation,
-    RandomHorizontalFlip
-)
 from torchreid.utils import (
     Logger, AverageMeter, check_isfile, open_all_layers, save_checkpoint,
     set_random_seed, collect_env_info, open_specified_layers,
     load_pretrained_weights, compute_model_complexity
 )
+from torchreid.data.transforms import (
+    Resize, Compose, ToTensor, Normalize, Random2DTranslation,
+    RandomHorizontalFlip
+)
 
-import datasets
 import models
+import datasets
 from default_parser import init_parser, optimizer_kwargs, lr_scheduler_kwargs
 
 parser = init_parser()
@@ -136,7 +135,7 @@ def main():
         print('Computing the weights ...')
         bce_weights = torch.zeros(num_attrs, dtype=torch.float)
         for _, attrs, _ in trainloader:
-            bce_weights += attrs.sum(0)  # sum along the batch dim
+            bce_weights += attrs.sum(0) # sum along the batch dim
         bce_weights /= len(trainloader) * args.batch_size
         print('Sample ratio for each attribute: {}'.format(bce_weights))
         bce_weights = torch.exp(-1 * bce_weights)
@@ -253,12 +252,12 @@ def train(epoch, model, criterion, optimizer, scheduler, trainloader, use_gpu):
 
         losses.update(loss.item(), imgs.size(0))
 
-        if (batch_idx + 1) % args.print_freq == 0:
+        if (batch_idx+1) % args.print_freq == 0:
             # estimate remaining time
             num_batches = len(trainloader)
             eta_seconds = batch_time.avg * (
-                    num_batches - (batch_idx + 1) + (args.max_epoch -
-                                                     (epoch + 1)) * num_batches
+                num_batches - (batch_idx+1) + (args.max_epoch -
+                                               (epoch+1)) * num_batches
             )
             eta_str = str(datetime.timedelta(seconds=int(eta_seconds)))
             print(
@@ -325,7 +324,7 @@ def test(model, testloader, attr_dict, use_gpu):
         overlaps = outputs * attrs
         mA_history['correct_pos'] += overlaps.sum(0)
         mA_history['real_pos'] += attrs.sum(0)
-        inv_overlaps = (1 - outputs) * (1 - attrs)
+        inv_overlaps = (1-outputs) * (1-attrs)
         mA_history['correct_neg'] += inv_overlaps.sum(0)
         mA_history['real_neg'] += (1 - attrs).sum(0)
 
@@ -341,7 +340,7 @@ def test(model, testloader, attr_dict, use_gpu):
 
         num_persons += imgs.size(0)
 
-        if (batch_idx + 1) % args.print_freq == 0:
+        if (batch_idx+1) % args.print_freq == 0:
             print(
                 'Processed batch {}/{}'.format(batch_idx + 1, len(testloader))
             )
@@ -377,11 +376,11 @@ def test(model, testloader, attr_dict, use_gpu):
     ins_acc /= num_persons
     ins_prec /= num_persons
     ins_rec /= num_persons
-    ins_f1 = (2 * ins_prec * ins_rec) / (ins_prec + ins_rec)
+    ins_f1 = (2*ins_prec*ins_rec) / (ins_prec+ins_rec)
 
     term1 = mA_history['correct_pos'] / mA_history['real_pos']
     term2 = mA_history['correct_neg'] / mA_history['real_neg']
-    label_mA_verbose = (term1 + term2) * 0.5
+    label_mA_verbose = (term1+term2) * 0.5
     label_mA = label_mA_verbose.mean()
 
     print('* Results *')

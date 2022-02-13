@@ -2,7 +2,6 @@
 Code imported from https://github.com/Cadene/pretrained-models.pytorch
 """
 from __future__ import division, absolute_import
-
 import torch
 import torch.nn as nn
 import torch.utils.model_zoo as model_zoo
@@ -13,7 +12,7 @@ pretrained_settings = {
     'inceptionresnetv2': {
         'imagenet': {
             'url':
-                'http://data.lip6.fr/cadene/pretrainedmodels/inceptionresnetv2-520b38e4.pth',
+            'http://data.lip6.fr/cadene/pretrainedmodels/inceptionresnetv2-520b38e4.pth',
             'input_space': 'RGB',
             'input_size': [3, 299, 299],
             'input_range': [0, 1],
@@ -23,7 +22,7 @@ pretrained_settings = {
         },
         'imagenet+background': {
             'url':
-                'http://data.lip6.fr/cadene/pretrainedmodels/inceptionresnetv2-520b38e4.pth',
+            'http://data.lip6.fr/cadene/pretrainedmodels/inceptionresnetv2-520b38e4.pth',
             'input_space': 'RGB',
             'input_size': [3, 299, 299],
             'input_range': [0, 1],
@@ -46,11 +45,11 @@ class BasicConv2d(nn.Module):
             stride=stride,
             padding=padding,
             bias=False
-        )  # verify bias false
+        ) # verify bias false
         self.bn = nn.BatchNorm2d(
             out_planes,
-            eps=0.001,  # value found in tensorflow
-            momentum=0.1,  # default pytorch value
+            eps=0.001, # value found in tensorflow
+            momentum=0.1, # default pytorch value
             affine=True
         )
         self.relu = nn.ReLU(inplace=False)

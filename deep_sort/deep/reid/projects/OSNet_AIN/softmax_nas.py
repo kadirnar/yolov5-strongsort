@@ -8,19 +8,19 @@ from torchreid.losses import CrossEntropyLoss
 class ImageSoftmaxNASEngine(Engine):
 
     def __init__(
-            self,
-            datamanager,
-            model,
-            optimizer,
-            scheduler=None,
-            use_gpu=False,
-            label_smooth=True,
-            mc_iter=1,
-            init_lmda=1.,
-            min_lmda=1.,
-            lmda_decay_step=20,
-            lmda_decay_rate=0.5,
-            fixed_lmda=False
+        self,
+        datamanager,
+        model,
+        optimizer,
+        scheduler=None,
+        use_gpu=False,
+        label_smooth=True,
+        mc_iter=1,
+        init_lmda=1.,
+        min_lmda=1.,
+        lmda_decay_step=20,
+        lmda_decay_rate=0.5,
+        fixed_lmda=False
     ):
         super(ImageSoftmaxNASEngine, self).__init__(datamanager, use_gpu)
         self.mc_iter = mc_iter
@@ -52,8 +52,8 @@ class ImageSoftmaxNASEngine(Engine):
         if self.fixed_lmda or self.lmda_decay_step == -1:
             lmda = self.init_lmda
         else:
-            lmda = self.init_lmda * self.lmda_decay_rate ** (
-                    self.epoch // self.lmda_decay_step
+            lmda = self.init_lmda * self.lmda_decay_rate**(
+                self.epoch // self.lmda_decay_step
             )
             if lmda < self.min_lmda:
                 lmda = self.min_lmda

@@ -27,7 +27,6 @@ def tik_tok(func):
     Returns:
 
     """
-
     @wraps(func)
     def _time_it(*args, **kwargs):
         start = time()

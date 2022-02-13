@@ -5,14 +5,14 @@ Reference:
       performance of convolutional neural networks via attention transfer. ICLR, 2017
     - Zhou et al. Omni-Scale Feature Learning for Person Re-Identification. ICCV, 2019.
 """
-import argparse
-import os.path as osp
-
-import cv2
 import numpy as np
+import os.path as osp
+import argparse
+import cv2
 import torch
-import torchreid
 from torch.nn import functional as F
+
+import torchreid
 from torchreid.utils import (
     check_isfile, mkdir_if_missing, load_pretrained_weights
 )
@@ -24,14 +24,14 @@ GRID_SPACING = 10
 
 @torch.no_grad()
 def visactmap(
-        model,
-        test_loader,
-        save_dir,
-        width,
-        height,
-        use_gpu,
-        img_mean=None,
-        img_std=None
+    model,
+    test_loader,
+    save_dir,
+    width,
+    height,
+    use_gpu,
+    img_mean=None,
+    img_std=None
 ):
     if img_mean is None or img_std is None:
         # use imagenet mean and std
@@ -41,7 +41,7 @@ def visactmap(
     model.eval()
 
     for target in list(test_loader.keys()):
-        data_loader = test_loader[target]['query']  # only process query images
+        data_loader = test_loader[target]['query'] # only process query images
         # original images and activation maps are saved individually
         actmap_dir = osp.join(save_dir, 'actmap_' + target)
         mkdir_if_missing(actmap_dir)
@@ -73,7 +73,7 @@ def visactmap(
                 )
 
             # compute activation maps
-            outputs = (outputs ** 2).sum(1)
+            outputs = (outputs**2).sum(1)
             b, h, w = outputs.size()
             outputs = outputs.view(b, h * w)
             outputs = F.normalize(outputs, p=2, dim=1)
@@ -92,34 +92,34 @@ def visactmap(
                 for t, m, s in zip(img, img_mean, img_std):
                     t.mul_(s).add_(m).clamp_(0, 1)
                 img_np = np.uint8(np.floor(img.numpy() * 255))
-                img_np = img_np.transpose((1, 2, 0))  # (c, h, w) -> (h, w, c)
+                img_np = img_np.transpose((1, 2, 0)) # (c, h, w) -> (h, w, c)
 
                 # activation map
                 am = outputs[j, ...].numpy()
                 am = cv2.resize(am, (width, height))
                 am = 255 * (am - np.min(am)) / (
-                        np.max(am) - np.min(am) + 1e-12
+                    np.max(am) - np.min(am) + 1e-12
                 )
                 am = np.uint8(np.floor(am))
                 am = cv2.applyColorMap(am, cv2.COLORMAP_JET)
 
                 # overlapped
-                overlapped = img_np * 0.3 + am * 0.7
+                overlapped = img_np*0.3 + am*0.7
                 overlapped[overlapped > 255] = 255
                 overlapped = overlapped.astype(np.uint8)
 
                 # save images in a single figure (add white spacing between images)
                 # from left to right: original image, activation map, overlapped image
                 grid_img = 255 * np.ones(
-                    (height, 3 * width + 2 * GRID_SPACING, 3), dtype=np.uint8
+                    (height, 3*width + 2*GRID_SPACING, 3), dtype=np.uint8
                 )
                 grid_img[:, :width, :] = img_np[:, :, ::-1]
                 grid_img[:,
-                width + GRID_SPACING:2 * width + GRID_SPACING, :] = am
-                grid_img[:, 2 * width + 2 * GRID_SPACING:, :] = overlapped
+                         width + GRID_SPACING:2*width + GRID_SPACING, :] = am
+                grid_img[:, 2*width + 2*GRID_SPACING:, :] = overlapped
                 cv2.imwrite(osp.join(actmap_dir, imname + '.jpg'), grid_img)
 
-            if (batch_idx + 1) % 10 == 0:
+            if (batch_idx+1) % 10 == 0:
                 print(
                     '- done batch {}/{}'.format(
                         batch_idx + 1, len(data_loader)

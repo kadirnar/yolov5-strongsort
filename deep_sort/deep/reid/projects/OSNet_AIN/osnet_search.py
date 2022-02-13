@@ -1,11 +1,10 @@
 from __future__ import division, absolute_import
-
 import torch
 from torch import nn
 from torch.nn import functional as F
 
 EPS = 1e-12
-NORM_AFFINE = False  # enable affine transformations for normalization layer
+NORM_AFFINE = False # enable affine transformations for normalization layer
 
 
 ##########
@@ -33,14 +32,14 @@ class ConvLayer(nn.Module):
     """Convolution layer (conv + bn + relu)."""
 
     def __init__(
-            self,
-            in_channels,
-            out_channels,
-            kernel_size,
-            stride=1,
-            padding=0,
-            groups=1,
-            IN=False
+        self,
+        in_channels,
+        out_channels,
+        kernel_size,
+        stride=1,
+        padding=0,
+        groups=1,
+        IN=False
     ):
         super(ConvLayer, self).__init__()
         self.conv = nn.Conv2d(
@@ -68,7 +67,7 @@ class Conv1x1(nn.Module):
     """1x1 convolution + bn + relu."""
 
     def __init__(
-            self, in_channels, out_channels, stride=1, groups=1, ibn=False
+        self, in_channels, out_channels, stride=1, groups=1, ibn=False
     ):
         super(Conv1x1, self).__init__()
         self.conv = nn.Conv2d(
@@ -189,13 +188,13 @@ class ChannelGate(nn.Module):
     """A mini-network that generates channel-wise gates conditioned on input tensor."""
 
     def __init__(
-            self,
-            in_channels,
-            num_gates=None,
-            return_gates=False,
-            gate_activation='sigmoid',
-            reduction=16,
-            layer_norm=False
+        self,
+        in_channels,
+        num_gates=None,
+        return_gates=False,
+        gate_activation='sigmoid',
+        reduction=16,
+        layer_norm=False
     ):
         super(ChannelGate, self).__init__()
         if num_gates is None:
@@ -307,7 +306,7 @@ class OSBlockINv1(nn.Module):
             x2_t = conv2_t(x1)
             x2 = x2 + self.gate(x2_t)
         x3 = self.conv3(x2)
-        x3 = self.IN(x3)  # IN inside residual
+        x3 = self.IN(x3) # IN inside residual
         if self.downsample is not None:
             identity = self.downsample(identity)
         out = x3 + identity
@@ -345,7 +344,7 @@ class OSBlockINv2(nn.Module):
         if self.downsample is not None:
             identity = self.downsample(identity)
         out = x3 + identity
-        out = self.IN(out)  # IN outside residual
+        out = self.IN(out) # IN outside residual
         return F.relu(out)
 
 
@@ -378,11 +377,11 @@ class OSBlockINv3(nn.Module):
             x2_t = conv2_t(x1)
             x2 = x2 + self.gate(x2_t)
         x3 = self.conv3(x2)
-        x3 = self.IN_in(x3)  # inside residual
+        x3 = self.IN_in(x3) # inside residual
         if self.downsample is not None:
             identity = self.downsample(identity)
         out = x3 + identity
-        out = self.IN_out(out)  # IN outside residual
+        out = self.IN_out(out) # IN outside residual
         return F.relu(out)
 
 
@@ -441,15 +440,15 @@ class OSNet(nn.Module):
     """
 
     def __init__(
-            self,
-            num_classes,
-            blocks,
-            layers,
-            channels,
-            feature_dim=512,
-            loss='softmax',
-            search_space=None,
-            **kwargs
+        self,
+        num_classes,
+        blocks,
+        layers,
+        channels,
+        feature_dim=512,
+        loss='softmax',
+        search_space=None,
+        **kwargs
     ):
         super(OSNet, self).__init__()
         num_blocks = len(blocks)
@@ -487,7 +486,7 @@ class OSNet(nn.Module):
         self.classifier = nn.Linear(self.feature_dim, num_classes)
 
     def _make_layer(
-            self, block, layer, in_channels, out_channels, search_space
+        self, block, layer, in_channels, out_channels, search_space
     ):
         layers = nn.ModuleList()
         layers += [block(in_channels, out_channels, search_space=search_space)]

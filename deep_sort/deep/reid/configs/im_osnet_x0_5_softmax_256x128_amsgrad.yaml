@@ -4,12 +4,12 @@ model:
 
 data:
   type: 'image'
-  sources: [ 'market1501' ]
-  targets: [ 'market1501' ]
+  sources: ['market1501']
+  targets: ['market1501']
   height: 256
   width: 128
   combineall: False
-  transforms: [ 'random_flip' ]
+  transforms: ['random_flip']
   save_dir: 'log/osnet_x0_5_market1501_softmax'
 
 loss:
@@ -23,9 +23,9 @@ train:
   max_epoch: 180
   batch_size: 128
   fixbase_epoch: 10
-  open_layers: [ 'classifier' ]
+  open_layers: ['classifier']
   lr_scheduler: 'single_step'
-  stepsize: [ 80 ]
+  stepsize: [80]
 
 test:
   batch_size: 300

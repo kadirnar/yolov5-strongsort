@@ -1,8 +1,7 @@
 from __future__ import division, print_function, absolute_import
-
+import re
 import glob
 import os.path as osp
-import re
 
 from ..dataset import ImageDataset
 
@@ -61,7 +60,7 @@ class DukeMTMCreID(ImageDataset):
         for img_path in img_paths:
             pid, camid = map(int, pattern.search(img_path).groups())
             assert 1 <= camid <= 8
-            camid -= 1  # index starts from 0
+            camid -= 1 # index starts from 0
             if relabel:
                 pid = pid2label[pid]
             data.append((img_path, pid, camid))

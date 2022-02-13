@@ -1,5 +1,4 @@
 from __future__ import division, print_function, absolute_import
-
 import os.path as osp
 
 from ..dataset import ImageDataset
@@ -91,8 +90,8 @@ class MSMT17(ImageDataset):
 
         for img_idx, img_info in enumerate(lines):
             img_path, pid = img_info.split(' ')
-            pid = int(pid)  # no need to relabel
-            camid = int(img_path.split('_')[2]) - 1  # index starts from 0
+            pid = int(pid) # no need to relabel
+            camid = int(img_path.split('_')[2]) - 1 # index starts from 0
             img_path = osp.join(dir_path, img_path)
             data.append((img_path, pid, camid))
 

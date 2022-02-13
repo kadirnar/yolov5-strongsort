@@ -1,5 +1,4 @@
 from __future__ import division, absolute_import
-
 import torch
 from torch import nn
 from torch.nn import functional as F
@@ -209,14 +208,14 @@ class HACNN(nn.Module):
     #    learn_region (bool): whether to learn region features (i.e. local branch)
 
     def __init__(
-            self,
-            num_classes,
-            loss='softmax',
-            nchannels=[128, 256, 384],
-            feat_dim=512,
-            learn_region=True,
-            use_gpu=True,
-            **kwargs
+        self,
+        num_classes,
+        loss='softmax',
+        nchannels=[128, 256, 384],
+        feat_dim=512,
+        learn_region=True,
+        use_gpu=True,
+        **kwargs
     ):
         super(HACNN, self).__init__()
         self.loss = loss

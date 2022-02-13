@@ -1,7 +1,5 @@
 from __future__ import print_function, absolute_import
-
 import warnings
-
 import torch
 import torch.nn as nn
 
@@ -11,19 +9,19 @@ AVAI_OPTIMS = ['adam', 'amsgrad', 'sgd', 'rmsprop', 'radam']
 
 
 def build_optimizer(
-        model,
-        optim='adam',
-        lr=0.0003,
-        weight_decay=5e-04,
-        momentum=0.9,
-        sgd_dampening=0,
-        sgd_nesterov=False,
-        rmsprop_alpha=0.99,
-        adam_beta1=0.9,
-        adam_beta2=0.99,
-        staged_lr=False,
-        new_layers='',
-        base_lr_mult=0.1
+    model,
+    optim='adam',
+    lr=0.0003,
+    weight_decay=5e-04,
+    momentum=0.9,
+    sgd_dampening=0,
+    sgd_nesterov=False,
+    rmsprop_alpha=0.99,
+    adam_beta1=0.9,
+    adam_beta2=0.99,
+    staged_lr=False,
+    new_layers='',
+    base_lr_mult=0.1
 ):
     """A function wrapper for building an optimizer.
 

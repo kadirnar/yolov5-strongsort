@@ -1,7 +1,5 @@
 from __future__ import division, absolute_import
-
 import warnings
-
 import torch
 from torch import nn
 from torch.nn import functional as F
@@ -12,13 +10,13 @@ __all__ = [
 
 pretrained_urls = {
     'osnet_ain_x1_0':
-        'https://drive.google.com/uc?id=1-CaioD9NaqbHK_kzSMW8VE4_3KcsRjEo',
+    'https://drive.google.com/uc?id=1-CaioD9NaqbHK_kzSMW8VE4_3KcsRjEo',
     'osnet_ain_x0_75':
-        'https://drive.google.com/uc?id=1apy0hpsMypqstfencdH-jKIUEFOW4xoM',
+    'https://drive.google.com/uc?id=1apy0hpsMypqstfencdH-jKIUEFOW4xoM',
     'osnet_ain_x0_5':
-        'https://drive.google.com/uc?id=1KusKvEYyKGDTUBVRxRiz55G31wkihB6l',
+    'https://drive.google.com/uc?id=1KusKvEYyKGDTUBVRxRiz55G31wkihB6l',
     'osnet_ain_x0_25':
-        'https://drive.google.com/uc?id=1SxQt2AvmEcgWNhaRb2xC4rP6ZwVDP0Wt'
+    'https://drive.google.com/uc?id=1SxQt2AvmEcgWNhaRb2xC4rP6ZwVDP0Wt'
 }
 
 
@@ -29,14 +27,14 @@ class ConvLayer(nn.Module):
     """Convolution layer (conv + bn + relu)."""
 
     def __init__(
-            self,
-            in_channels,
-            out_channels,
-            kernel_size,
-            stride=1,
-            padding=0,
-            groups=1,
-            IN=False
+        self,
+        in_channels,
+        out_channels,
+        kernel_size,
+        stride=1,
+        padding=0,
+        groups=1,
+        IN=False
     ):
         super(ConvLayer, self).__init__()
         self.conv = nn.Conv2d(
@@ -180,13 +178,13 @@ class ChannelGate(nn.Module):
     """A mini-network that generates channel-wise gates conditioned on input tensor."""
 
     def __init__(
-            self,
-            in_channels,
-            num_gates=None,
-            return_gates=False,
-            gate_activation='sigmoid',
-            reduction=16,
-            layer_norm=False
+        self,
+        in_channels,
+        num_gates=None,
+        return_gates=False,
+        gate_activation='sigmoid',
+        reduction=16,
+        layer_norm=False
     ):
         super(ChannelGate, self).__init__()
         if num_gates is None:
@@ -298,7 +296,7 @@ class OSBlockINin(nn.Module):
             x2_t = conv2_t(x1)
             x2 = x2 + self.gate(x2_t)
         x3 = self.conv3(x2)
-        x3 = self.IN(x3)  # IN inside residual
+        x3 = self.IN(x3) # IN inside residual
         if self.downsample is not None:
             identity = self.downsample(identity)
         out = x3 + identity
@@ -318,15 +316,15 @@ class OSNet(nn.Module):
     """
 
     def __init__(
-            self,
-            num_classes,
-            blocks,
-            layers,
-            channels,
-            feature_dim=512,
-            loss='softmax',
-            conv1_IN=False,
-            **kwargs
+        self,
+        num_classes,
+        blocks,
+        layers,
+        channels,
+        feature_dim=512,
+        loss='softmax',
+        conv1_IN=False,
+        **kwargs
     ):
         super(OSNet, self).__init__()
         num_blocks = len(blocks)
@@ -498,7 +496,7 @@ def init_pretrained_weights(model, key=''):
 
     for k, v in state_dict.items():
         if k.startswith('module.'):
-            k = k[7:]  # discard module.
+            k = k[7:] # discard module.
 
         if k in model_dict and model_dict[k].size() == v.size():
             new_state_dict[k] = v
@@ -518,13 +516,13 @@ def init_pretrained_weights(model, key=''):
     else:
         print(
             'Successfully loaded imagenet pretrained weights from "{}"'.
-                format(cached_file)
+            format(cached_file)
         )
         if len(discarded_layers) > 0:
             print(
                 '** The following layers are discarded '
                 'due to unmatched keys or layer size: {}'.
-                    format(discarded_layers)
+                format(discarded_layers)
             )
 
 
@@ -532,7 +530,7 @@ def init_pretrained_weights(model, key=''):
 # Instantiation
 ##########
 def osnet_ain_x1_0(
-        num_classes=1000, pretrained=True, loss='softmax', **kwargs
+    num_classes=1000, pretrained=True, loss='softmax', **kwargs
 ):
     model = OSNet(
         num_classes,
@@ -552,7 +550,7 @@ def osnet_ain_x1_0(
 
 
 def osnet_ain_x0_75(
-        num_classes=1000, pretrained=True, loss='softmax', **kwargs
+    num_classes=1000, pretrained=True, loss='softmax', **kwargs
 ):
     model = OSNet(
         num_classes,
@@ -572,7 +570,7 @@ def osnet_ain_x0_75(
 
 
 def osnet_ain_x0_5(
-        num_classes=1000, pretrained=True, loss='softmax', **kwargs
+    num_classes=1000, pretrained=True, loss='softmax', **kwargs
 ):
     model = OSNet(
         num_classes,
@@ -592,7 +590,7 @@ def osnet_ain_x0_5(
 
 
 def osnet_ain_x0_25(
-        num_classes=1000, pretrained=True, loss='softmax', **kwargs
+    num_classes=1000, pretrained=True, loss='softmax', **kwargs
 ):
     model = OSNet(
         num_classes,

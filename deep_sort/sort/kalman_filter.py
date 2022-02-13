@@ -2,6 +2,7 @@
 import numpy as np
 import scipy.linalg
 
+
 """
 Table for the 0.95 quantile of the chi-square distribution with N degrees of
 freedom (contains values for N=1, ..., 9). Taken from MATLAB/Octave's chi2inv
@@ -73,10 +74,10 @@ class KalmanFilter(object):
         mean = np.r_[mean_pos, mean_vel]
 
         std = [
-            2 * self._std_weight_position * measurement[0],  # the center point x
-            2 * self._std_weight_position * measurement[1],  # the center point y
-            1 * measurement[2],  # the ratio of width/height
-            2 * self._std_weight_position * measurement[3],  # the height
+            2 * self._std_weight_position * measurement[0],   # the center point x
+            2 * self._std_weight_position * measurement[1],   # the center point y
+            1 * measurement[2],                               # the ratio of width/height
+            2 * self._std_weight_position * measurement[3],   # the height
             10 * self._std_weight_velocity * measurement[0],
             10 * self._std_weight_velocity * measurement[1],
             0.1 * measurement[2],

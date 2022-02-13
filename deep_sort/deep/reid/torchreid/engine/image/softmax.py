@@ -54,13 +54,13 @@ class ImageSoftmaxEngine(Engine):
     """
 
     def __init__(
-            self,
-            datamanager,
-            model,
-            optimizer,
-            scheduler=None,
-            use_gpu=True,
-            label_smooth=True
+        self,
+        datamanager,
+        model,
+        optimizer,
+        scheduler=None,
+        use_gpu=True,
+        label_smooth=True
     ):
         super(ImageSoftmaxEngine, self).__init__(datamanager, use_gpu)
 

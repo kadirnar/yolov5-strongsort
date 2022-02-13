@@ -1,5 +1,4 @@
 from __future__ import division, print_function, absolute_import
-
 import copy
 import glob
 import os.path as osp
@@ -56,6 +55,6 @@ class CUHKSYSU(ImageDataset):
             img_name = osp.basename(img_path)
             pid = img_name.split('_')[0]
             label = pid2label[pid]
-            data.append((img_path, label, 0))  # dummy camera id
+            data.append((img_path, label, 0)) # dummy camera id
 
         return data

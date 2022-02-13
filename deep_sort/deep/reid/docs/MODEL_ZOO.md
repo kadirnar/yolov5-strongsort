@@ -1,15 +1,14 @@
 # Model Zoo
 
 - Results are presented in the format of *<Rank-1 (mAP)>*.
-- When computing model size and FLOPs, only layers that are used at test time are considered (
-  see `torchreid.utils.compute_model_complexity`).
+- When computing model size and FLOPs, only layers that are used at test time are considered (see `torchreid.utils.compute_model_complexity`).
 - Asterisk (\*) means the model is trained from scratch.
 - `combineall=True` means all images in the dataset are used for model training.
-- Why not use heavy data augmentation like [random erasing](https://arxiv.org/abs/1708.04896) for model training? It's
-  because heavy data augmentation might harm the cross-dataset generalization performance (
-  see [this paper](https://arxiv.org/abs/1708.04896)).
+- Why not use heavy data augmentation like [random erasing](https://arxiv.org/abs/1708.04896) for model training? It's because heavy data augmentation might harm the cross-dataset generalization performance (see [this paper](https://arxiv.org/abs/1708.04896)).
+
 
 ## ImageNet pretrained models
+
 
 | Model | Download |
 | :--- | :---: |
@@ -27,7 +26,9 @@
 | osnet_ain_x0_5 | [model](https://drive.google.com/file/d/1KusKvEYyKGDTUBVRxRiz55G31wkihB6l/view?usp=sharing) |
 | osnet_ain_x0_25 | [model](https://drive.google.com/file/d/1SxQt2AvmEcgWNhaRb2xC4rP6ZwVDP0Wt/view?usp=sharing) |
 
+
 ## Same-domain ReID
+
 
 | Model | # Param (10^6) | GFLOPs | Loss | Input | Transforms | Distance | market1501  | dukemtmcreid | msmt17 |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
@@ -42,23 +43,29 @@
 | osnet_x0_5 | 0.6 | 0.27 | softmax | (256, 128) | `random_flip` | `euclidean` | [92.5 (79.8)](https://drive.google.com/file/d/1PLB9rgqrUM7blWrg4QlprCuPT7ILYGKT/view?usp=sharing) | [85.1 (67.4)](https://drive.google.com/file/d/1KoUVqmiST175hnkALg9XuTi1oYpqcyTu/view?usp=sharing) | [69.7 (37.5)](https://drive.google.com/file/d/1UT3AxIaDvS2PdxzZmbkLmjtiqq7AIKCv/view?usp=sharing) |
 | osnet_x0_25 | 0.2 | 0.08 | softmax | (256, 128) | `random_flip` | `euclidean` | [91.2 (75.0)](https://drive.google.com/file/d/1z1UghYvOTtjx7kEoRfmqSMu-z62J6MAj/view?usp=sharing) | [82.0 (61.4)](https://drive.google.com/file/d/1eumrtiXT4NOspjyEV4j8cHmlOaaCGk5l/view?usp=sharing) | [61.4 (29.5)](https://drive.google.com/file/d/1sSwXSUlj4_tHZequ_iZ8w_Jh0VaRQMqF/view?usp=sharing) |
 
+
 ## Cross-domain ReID
 
 #### Market1501 -> DukeMTMC-reID
+
 
 | Model | # Param (10^6) | GFLOPs | Loss | Input | Transforms | Distance  | Rank-1 | Rank-5 | Rank-10 | mAP | Download |
 | :--- | :---: | :---: | :---: | :---: |  :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | osnet_ibn_x1_0 | 2.2 | 0.98  | softmax | (256, 128) | `random_flip`, `color_jitter` | `euclidean` | 48.5 | 62.3 | 67.4 | 26.7 | [model](https://drive.google.com/file/d/1uWW7_z_IcUmRNPqQOrEBdsvic94fWH37/view?usp=sharing) |
 | osnet_ain_x1_0 | 2.2 | 0.98  | softmax | (256, 128) | `random_flip`, `color_jitter` | `cosine` | 52.4 | 66.1 | 71.2 | 30.5 | [model](https://drive.google.com/file/d/14bNFGm0FhwHEkEpYKqKiDWjLNhXywFAd/view?usp=sharing) |
 
+
 #### DukeMTMC-reID -> Market1501
+
 
 | Model | # Param (10^6) | GFLOPs | Loss | Input | Transforms | Distance  | Rank-1 | Rank-5 | Rank-10 | mAP | Download |
 | :--- | :---: | :---: | :---: | :---: |  :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | osnet_ibn_x1_0 | 2.2 | 0.98  | softmax | (256, 128) | `random_flip`, `color_jitter` | `euclidean` | 57.7 | 73.7 | 80.0 | 26.1 | [model](https://drive.google.com/file/d/1CNxL1IP0BjcE1TSttiVOID1VNipAjiF3/view?usp=sharing) |
 | osnet_ain_x1_0 | 2.2 | 0.98  | softmax | (256, 128) | `random_flip`, `color_jitter` | `cosine` | 61.0 | 77.0 | 82.5 | 30.6 | [model](https://drive.google.com/file/d/1hypJvq8G04SOby6jvF337GEkg5K_bmCw/view?usp=sharing) |
 
+
 #### MSMT17 (`combineall=True`) -> Market1501 & DukeMTMC-reID
+
 
 | Model | # Param (10^6) | GFLOPs | Loss | Input | Transforms | Distance | msmt17 -> market1501 | msmt17 -> dukemtmcreid | Download |
 | :--- | :---: | :---: | :---: | :---: |  :---: | :---: | :---: | :---: | :---: |
@@ -70,16 +77,14 @@
 | osnet_ibn_x1_0 | 2.2 | 0.98 | softmax | (256, 128) | `random_flip`, `color_jitter` | `euclidean` | 66.5 (37.2) | 67.4 (45.6) | [model](https://drive.google.com/file/d/1q3Sj2ii34NlfxA4LvmHdWO_75NDRmECJ/view?usp=sharing) |
 | osnet_ain_x1_0 | 2.2 | 0.98 | softmax | (256, 128) | `random_flip`, `color_jitter` | `cosine` | 70.1 (43.3) | 71.1 (52.7) | [model](https://drive.google.com/file/d/1SigwBE6mPdqiJMqhuIY4aqC7--5CsMal/view?usp=sharing) |
 
+
 #### Multi-source domain generalization
 
-The models below are trained using multiple source datasets, as described
-in [Zhou et al. TPAMI'21](https://arxiv.org/abs/1910.06827).
+The models below are trained using multiple source datasets, as described in [Zhou et al. TPAMI'21](https://arxiv.org/abs/1910.06827).
 
 Regarding the abbreviations, MS is MSMT17; M is Market1501; D is DukeMTMC-reID; and C is CUHK03.
 
-All models were trained
-with [im_osnet_ain_x1_0_softmax_256x128_amsgrad_cosine.yaml](https://github.com/KaiyangZhou/deep-person-reid/blob/master/configs/im_osnet_ain_x1_0_softmax_256x128_amsgrad_cosine.yaml)
-and `max_epoch=50`.
+All models were trained with [im_osnet_ain_x1_0_softmax_256x128_amsgrad_cosine.yaml](https://github.com/KaiyangZhou/deep-person-reid/blob/master/configs/im_osnet_ain_x1_0_softmax_256x128_amsgrad_cosine.yaml) and `max_epoch=50`.
 
 | Model | # Param (10^6) | GFLOPs | Loss | Input | Transforms | Distance | MS+D+C->M | MS+M+C->D | MS+D+M->C |D+M+C->MS |
 | :--- | :---: | :---: | :---: | :---: |  :---: | :---: | :---: | :---: | :---: | :---: |

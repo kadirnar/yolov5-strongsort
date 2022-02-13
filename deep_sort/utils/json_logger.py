@@ -3,9 +3,9 @@ References:
     https://medium.com/analytics-vidhya/creating-a-custom-logging-mechanism-for-real-time-object-detection-using-tdd-4ca2cfcd0a2f
 """
 import json
-from datetime import datetime
 from os import makedirs
 from os.path import exists, join
+from datetime import datetime
 
 
 class JsonMeta(object):

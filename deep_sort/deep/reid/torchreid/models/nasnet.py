@@ -1,5 +1,4 @@
 from __future__ import division, absolute_import
-
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -29,9 +28,9 @@ pretrained_settings = {
         'imagenet': {
             # 'url': 'https://github.com/veronikayurchuk/pretrained-models.pytorch/releases/download/v1.0/nasnetmobile-7e03cead.pth.tar',
             'url':
-                'http://data.lip6.fr/cadene/pretrainedmodels/nasnetamobile-7e03cead.pth',
+            'http://data.lip6.fr/cadene/pretrainedmodels/nasnetamobile-7e03cead.pth',
             'input_space': 'RGB',
-            'input_size': [3, 224, 224],  # resize 256
+            'input_size': [3, 224, 224], # resize 256
             'input_range': [0, 1],
             'mean': [0.5, 0.5, 0.5],
             'std': [0.5, 0.5, 0.5],
@@ -83,13 +82,13 @@ class AvgPoolPad(nn.Module):
 class SeparableConv2d(nn.Module):
 
     def __init__(
-            self,
-            in_channels,
-            out_channels,
-            dw_kernel,
-            dw_stride,
-            dw_padding,
-            bias=False
+        self,
+        in_channels,
+        out_channels,
+        dw_kernel,
+        dw_stride,
+        dw_padding,
+        bias=False
     ):
         super(SeparableConv2d, self).__init__()
         self.depthwise_conv2d = nn.Conv2d(
@@ -114,14 +113,14 @@ class SeparableConv2d(nn.Module):
 class BranchSeparables(nn.Module):
 
     def __init__(
-            self,
-            in_channels,
-            out_channels,
-            kernel_size,
-            stride,
-            padding,
-            name=None,
-            bias=False
+        self,
+        in_channels,
+        out_channels,
+        kernel_size,
+        stride,
+        padding,
+        name=None,
+        bias=False
     ):
         super(BranchSeparables, self).__init__()
         self.relu = nn.ReLU()
@@ -158,13 +157,13 @@ class BranchSeparables(nn.Module):
 class BranchSeparablesStem(nn.Module):
 
     def __init__(
-            self,
-            in_channels,
-            out_channels,
-            kernel_size,
-            stride,
-            padding,
-            bias=False
+        self,
+        in_channels,
+        out_channels,
+        kernel_size,
+        stride,
+        padding,
+        bias=False
     ):
         super(BranchSeparablesStem, self).__init__()
         self.relu = nn.ReLU()
@@ -195,14 +194,14 @@ class BranchSeparablesStem(nn.Module):
 class BranchSeparablesReduction(BranchSeparables):
 
     def __init__(
-            self,
-            in_channels,
-            out_channels,
-            kernel_size,
-            stride,
-            padding,
-            z_padding=1,
-            bias=False
+        self,
+        in_channels,
+        out_channels,
+        kernel_size,
+        stride,
+        padding,
+        z_padding=1,
+        bias=False
     ):
         BranchSeparables.__init__(
             self, in_channels, out_channels, kernel_size, stride, padding, bias
@@ -459,8 +458,8 @@ class CellStem1(nn.Module):
 class FirstCell(nn.Module):
 
     def __init__(
-            self, in_channels_left, out_channels_left, in_channels_right,
-            out_channels_right
+        self, in_channels_left, out_channels_left, in_channels_right,
+        out_channels_right
     ):
         super(FirstCell, self).__init__()
         self.conv_1x1 = nn.Sequential()
@@ -578,8 +577,8 @@ class FirstCell(nn.Module):
 class NormalCell(nn.Module):
 
     def __init__(
-            self, in_channels_left, out_channels_left, in_channels_right,
-            out_channels_right
+        self, in_channels_left, out_channels_left, in_channels_right,
+        out_channels_right
     ):
         super(NormalCell, self).__init__()
         self.conv_prev_1x1 = nn.Sequential()
@@ -675,8 +674,8 @@ class NormalCell(nn.Module):
 class ReductionCell0(nn.Module):
 
     def __init__(
-            self, in_channels_left, out_channels_left, in_channels_right,
-            out_channels_right
+        self, in_channels_left, out_channels_left, in_channels_right,
+        out_channels_right
     ):
         super(ReductionCell0, self).__init__()
         self.conv_prev_1x1 = nn.Sequential()
@@ -767,8 +766,8 @@ class ReductionCell0(nn.Module):
 class ReductionCell1(nn.Module):
 
     def __init__(
-            self, in_channels_left, out_channels_left, in_channels_right,
-            out_channels_right
+        self, in_channels_left, out_channels_left, in_channels_right,
+        out_channels_right
     ):
         super(ReductionCell1, self).__init__()
         self.conv_prev_1x1 = nn.Sequential()
@@ -901,13 +900,13 @@ class NASNetAMobile(nn.Module):
     """
 
     def __init__(
-            self,
-            num_classes,
-            loss,
-            stem_filters=32,
-            penultimate_filters=1056,
-            filters_multiplier=2,
-            **kwargs
+        self,
+        num_classes,
+        loss,
+        stem_filters=32,
+        penultimate_filters=1056,
+        filters_multiplier=2,
+        **kwargs
     ):
         super(NASNetAMobile, self).__init__()
         self.stem_filters = stem_filters
@@ -938,7 +937,7 @@ class NASNetAMobile(nn.Module):
         )
 
         self.cell_stem_0 = CellStem0(
-            self.stem_filters, num_filters=filters // (filters_multiplier ** 2)
+            self.stem_filters, num_filters=filters // (filters_multiplier**2)
         )
         self.cell_stem_1 = CellStem1(
             self.stem_filters, num_filters=filters // filters_multiplier
@@ -946,92 +945,92 @@ class NASNetAMobile(nn.Module):
 
         self.cell_0 = FirstCell(
             in_channels_left=filters,
-            out_channels_left=filters // 2,  # 1, 0.5
+            out_channels_left=filters // 2, # 1, 0.5
             in_channels_right=2 * filters,
             out_channels_right=filters
-        )  # 2, 1
+        ) # 2, 1
         self.cell_1 = NormalCell(
             in_channels_left=2 * filters,
-            out_channels_left=filters,  # 2, 1
+            out_channels_left=filters, # 2, 1
             in_channels_right=6 * filters,
             out_channels_right=filters
-        )  # 6, 1
+        ) # 6, 1
         self.cell_2 = NormalCell(
             in_channels_left=6 * filters,
-            out_channels_left=filters,  # 6, 1
+            out_channels_left=filters, # 6, 1
             in_channels_right=6 * filters,
             out_channels_right=filters
-        )  # 6, 1
+        ) # 6, 1
         self.cell_3 = NormalCell(
             in_channels_left=6 * filters,
-            out_channels_left=filters,  # 6, 1
+            out_channels_left=filters, # 6, 1
             in_channels_right=6 * filters,
             out_channels_right=filters
-        )  # 6, 1
+        ) # 6, 1
 
         self.reduction_cell_0 = ReductionCell0(
             in_channels_left=6 * filters,
-            out_channels_left=2 * filters,  # 6, 2
+            out_channels_left=2 * filters, # 6, 2
             in_channels_right=6 * filters,
             out_channels_right=2 * filters
-        )  # 6, 2
+        ) # 6, 2
 
         self.cell_6 = FirstCell(
             in_channels_left=6 * filters,
-            out_channels_left=filters,  # 6, 1
+            out_channels_left=filters, # 6, 1
             in_channels_right=8 * filters,
             out_channels_right=2 * filters
-        )  # 8, 2
+        ) # 8, 2
         self.cell_7 = NormalCell(
             in_channels_left=8 * filters,
-            out_channels_left=2 * filters,  # 8, 2
+            out_channels_left=2 * filters, # 8, 2
             in_channels_right=12 * filters,
             out_channels_right=2 * filters
-        )  # 12, 2
+        ) # 12, 2
         self.cell_8 = NormalCell(
             in_channels_left=12 * filters,
-            out_channels_left=2 * filters,  # 12, 2
+            out_channels_left=2 * filters, # 12, 2
             in_channels_right=12 * filters,
             out_channels_right=2 * filters
-        )  # 12, 2
+        ) # 12, 2
         self.cell_9 = NormalCell(
             in_channels_left=12 * filters,
-            out_channels_left=2 * filters,  # 12, 2
+            out_channels_left=2 * filters, # 12, 2
             in_channels_right=12 * filters,
             out_channels_right=2 * filters
-        )  # 12, 2
+        ) # 12, 2
 
         self.reduction_cell_1 = ReductionCell1(
             in_channels_left=12 * filters,
-            out_channels_left=4 * filters,  # 12, 4
+            out_channels_left=4 * filters, # 12, 4
             in_channels_right=12 * filters,
             out_channels_right=4 * filters
-        )  # 12, 4
+        ) # 12, 4
 
         self.cell_12 = FirstCell(
             in_channels_left=12 * filters,
-            out_channels_left=2 * filters,  # 12, 2
+            out_channels_left=2 * filters, # 12, 2
             in_channels_right=16 * filters,
             out_channels_right=4 * filters
-        )  # 16, 4
+        ) # 16, 4
         self.cell_13 = NormalCell(
             in_channels_left=16 * filters,
-            out_channels_left=4 * filters,  # 16, 4
+            out_channels_left=4 * filters, # 16, 4
             in_channels_right=24 * filters,
             out_channels_right=4 * filters
-        )  # 24, 4
+        ) # 24, 4
         self.cell_14 = NormalCell(
             in_channels_left=24 * filters,
-            out_channels_left=4 * filters,  # 24, 4
+            out_channels_left=4 * filters, # 24, 4
             in_channels_right=24 * filters,
             out_channels_right=4 * filters
-        )  # 24, 4
+        ) # 24, 4
         self.cell_15 = NormalCell(
             in_channels_left=24 * filters,
-            out_channels_left=4 * filters,  # 24, 4
+            out_channels_left=4 * filters, # 24, 4
             in_channels_right=24 * filters,
             out_channels_right=4 * filters
-        )  # 24, 4
+        ) # 24, 4
 
         self.relu = nn.ReLU()
         self.dropout = nn.Dropout()
@@ -1086,7 +1085,7 @@ class NASNetAMobile(nn.Module):
         x_cell_15 = F.avg_pool2d(
             x_cell_15,
             x_cell_15.size()[2:]
-        )  # global average pool
+        ) # global average pool
         x_cell_15 = x_cell_15.view(x_cell_15.size(0), -1)
         x_cell_15 = self.dropout(x_cell_15)
 

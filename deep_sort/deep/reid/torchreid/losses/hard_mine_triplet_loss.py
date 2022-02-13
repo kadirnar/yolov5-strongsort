@@ -1,5 +1,4 @@
 from __future__ import division, absolute_import
-
 import torch
 import torch.nn as nn
 
@@ -33,7 +32,7 @@ class TripletLoss(nn.Module):
         dist = torch.pow(inputs, 2).sum(dim=1, keepdim=True).expand(n, n)
         dist = dist + dist.t()
         dist.addmm_(inputs, inputs.t(), beta=1, alpha=-2)
-        dist = dist.clamp(min=1e-12).sqrt()  # for numerical stability
+        dist = dist.clamp(min=1e-12).sqrt() # for numerical stability
 
         # For each anchor, find the hardest positive and negative
         mask = targets.expand(n, n).eq(targets.expand(n, n).t())

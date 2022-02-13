@@ -1,10 +1,8 @@
 from __future__ import division, absolute_import
-
 import copy
+import numpy as np
 import random
 from collections import defaultdict
-
-import numpy as np
 from torch.utils.data.sampler import Sampler, RandomSampler, SequentialSampler
 
 AVAI_SAMPLERS = [
@@ -205,13 +203,13 @@ class RandomDatasetSampler(Sampler):
 
 
 def build_train_sampler(
-        data_source,
-        train_sampler,
-        batch_size=32,
-        num_instances=4,
-        num_cams=1,
-        num_datasets=1,
-        **kwargs
+    data_source,
+    train_sampler,
+    batch_size=32,
+    num_instances=4,
+    num_cams=1,
+    num_datasets=1,
+    **kwargs
 ):
     """Builds a training sampler.
 

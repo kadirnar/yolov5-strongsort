@@ -2,9 +2,7 @@
 Credit to https://github.com/XingangPan/IBN-Net.
 """
 from __future__ import division, absolute_import
-
 import math
-
 import torch.nn as nn
 import torch.utils.model_zoo as model_zoo
 
@@ -123,14 +121,14 @@ class ResNet(nn.Module):
     """
 
     def __init__(
-            self,
-            block,
-            layers,
-            num_classes=1000,
-            loss='softmax',
-            fc_dims=None,
-            dropout_p=None,
-            **kwargs
+        self,
+        block,
+        layers,
+        num_classes=1000,
+        loss='softmax',
+        fc_dims=None,
+        dropout_p=None,
+        **kwargs
     ):
         scale = 64
         self.inplanes = scale

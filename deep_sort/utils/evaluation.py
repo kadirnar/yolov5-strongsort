@@ -1,9 +1,7 @@
-import copy
 import os
-
-import motmetrics as mm
 import numpy as np
-
+import copy
+import motmetrics as mm
 mm.lap.default_solver = 'lap'
 from utils.io import read_results, unzip_objs
 
@@ -40,6 +38,7 @@ class Evaluator(object):
         # ignore boxes
         ignore_objs = self.gt_ignore_frame_dict.get(frame_id, [])
         ignore_tlwhs = unzip_objs(ignore_objs)[0]
+
 
         # remove ignored results
         keep = np.ones(len(trk_tlwhs), dtype=bool)

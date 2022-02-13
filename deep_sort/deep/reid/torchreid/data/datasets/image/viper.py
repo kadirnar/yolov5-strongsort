@@ -1,9 +1,8 @@
 from __future__ import division, print_function, absolute_import
-
 import glob
+import numpy as np
 import os.path as osp
 
-import numpy as np
 from torchreid.utils import read_json, write_json
 
 from ..dataset import ImageDataset
@@ -50,7 +49,7 @@ class VIPeR(ImageDataset):
         split = splits[split_id]
 
         train = split['train']
-        query = split['query']  # query and gallery share the same images
+        query = split['query'] # query and gallery share the same images
         gallery = split['gallery']
 
         train = [tuple(item) for item in train]

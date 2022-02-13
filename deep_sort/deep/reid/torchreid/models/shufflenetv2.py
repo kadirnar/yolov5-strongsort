@@ -2,7 +2,6 @@
 Code source: https://github.com/pytorch/vision
 """
 from __future__ import division, absolute_import
-
 import torch
 import torch.utils.model_zoo as model_zoo
 from torch import nn
@@ -14,9 +13,9 @@ __all__ = [
 
 model_urls = {
     'shufflenetv2_x0.5':
-        'https://download.pytorch.org/models/shufflenetv2_x0.5-f707e7126e.pth',
+    'https://download.pytorch.org/models/shufflenetv2_x0.5-f707e7126e.pth',
     'shufflenetv2_x1.0':
-        'https://download.pytorch.org/models/shufflenetv2_x1-5666bf0f80.pth',
+    'https://download.pytorch.org/models/shufflenetv2_x1-5666bf0f80.pth',
     'shufflenetv2_x1.5': None,
     'shufflenetv2_x2.0': None,
 }
@@ -130,7 +129,7 @@ class ShuffleNetV2(nn.Module):
     """
 
     def __init__(
-            self, num_classes, loss, stages_repeats, stages_out_channels, **kwargs
+        self, num_classes, loss, stages_repeats, stages_out_channels, **kwargs
     ):
         super(ShuffleNetV2, self).__init__()
         self.loss = loss
@@ -158,7 +157,7 @@ class ShuffleNetV2(nn.Module):
 
         stage_names = ['stage{}'.format(i) for i in [2, 3, 4]]
         for name, repeats, output_channels in zip(
-                stage_names, stages_repeats, self._stage_out_channels[1:]
+            stage_names, stages_repeats, self._stage_out_channels[1:]
         ):
             seq = [InvertedResidual(input_channels, output_channels, 2)]
             for i in range(repeats - 1):

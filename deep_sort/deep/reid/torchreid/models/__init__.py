@@ -1,25 +1,26 @@
 from __future__ import absolute_import
+import torch
 
-from .densenet import *
-from .hacnn import *
-from .inceptionresnetv2 import *
-from .inceptionv4 import *
+from .pcb import *
 from .mlfn import *
-from .mobilenetv2 import *
+from .hacnn import *
+from .osnet import *
+from .senet import *
 from .mudeep import *
 from .nasnet import *
-from .osnet import *
-from .osnet_ain import *
-from .pcb import *
 from .resnet import *
+from .densenet import *
+from .xception import *
+from .osnet_ain import *
+from .resnetmid import *
+from .shufflenet import *
+from .squeezenet import *
+from .inceptionv4 import *
+from .mobilenetv2 import *
 from .resnet_ibn_a import *
 from .resnet_ibn_b import *
-from .resnetmid import *
-from .senet import *
-from .shufflenet import *
 from .shufflenetv2 import *
-from .squeezenet import *
-from .xception import *
+from .inceptionresnetv2 import *
 
 __model_factory = {
     # image classification models
@@ -88,7 +89,7 @@ def show_avai_models():
 
 
 def build_model(
-        name, num_classes, loss='softmax', pretrained=True, use_gpu=True
+    name, num_classes, loss='softmax', pretrained=True, use_gpu=True
 ):
     """A function wrapper for building a model.
 

@@ -1,5 +1,4 @@
 from __future__ import division, absolute_import
-
 import torch
 import torch.utils.model_zoo as model_zoo
 from torch import nn
@@ -10,14 +9,14 @@ __all__ = ['mlfn']
 model_urls = {
     # training epoch = 5, top1 = 51.6
     'imagenet':
-        'https://mega.nz/#!YHxAhaxC!yu9E6zWl0x5zscSouTdbZu8gdFFytDdl-RAdD2DEfpk',
+    'https://mega.nz/#!YHxAhaxC!yu9E6zWl0x5zscSouTdbZu8gdFFytDdl-RAdD2DEfpk',
 }
 
 
 class MLFNBlock(nn.Module):
 
     def __init__(
-            self, in_channels, out_channels, stride, fsm_channels, groups=32
+        self, in_channels, out_channels, stride, fsm_channels, groups=32
     ):
         super(MLFNBlock, self).__init__()
         self.groups = groups
@@ -79,7 +78,7 @@ class MLFNBlock(nn.Module):
         # factor selection
         b, c = x.size(0), x.size(1)
         n = c // self.groups
-        ss = s.repeat(1, n, 1, 1)  # from (b, g, 1, 1) to (b, g*n=c, 1, 1)
+        ss = s.repeat(1, n, 1, 1) # from (b, g, 1, 1) to (b, g*n=c, 1, 1)
         ss = ss.view(b, n, self.groups, 1, 1)
         ss = ss.permute(0, 2, 1, 3, 4).contiguous()
         ss = ss.view(b, c, 1, 1)
@@ -108,13 +107,13 @@ class MLFN(nn.Module):
     """
 
     def __init__(
-            self,
-            num_classes,
-            loss='softmax',
-            groups=32,
-            channels=[64, 256, 512, 1024, 2048],
-            embed_dim=1024,
-            **kwargs
+        self,
+        num_classes,
+        loss='softmax',
+        groups=32,
+        channels=[64, 256, 512, 1024, 2048],
+        embed_dim=1024,
+        **kwargs
     ):
         super(MLFN, self).__init__()
         self.loss = loss
@@ -226,7 +225,7 @@ class MLFN(nn.Module):
         x = self.fc_x(x)
         s_hat = self.fc_s(s_hat)
 
-        v = (x + s_hat) * 0.5
+        v = (x+s_hat) * 0.5
         v = v.view(v.size(0), -1)
 
         if not self.training:
@@ -265,6 +264,6 @@ def mlfn(num_classes, loss='softmax', pretrained=True, **kwargs):
         import warnings
         warnings.warn(
             'The imagenet pretrained weights need to be manually downloaded from {}'
-                .format(model_urls['imagenet'])
+            .format(model_urls['imagenet'])
         )
     return model

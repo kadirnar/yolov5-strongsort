@@ -1,5 +1,4 @@
 from __future__ import division, print_function, absolute_import
-
 import os.path as osp
 
 from torchreid.utils import read_json, write_json, mkdir_if_missing
@@ -25,12 +24,12 @@ class CUHK03(ImageDataset):
     dataset_url = None
 
     def __init__(
-            self,
-            root='',
-            split_id=0,
-            cuhk03_labeled=False,
-            cuhk03_classic_split=False,
-            **kwargs
+        self,
+        root='',
+        split_id=0,
+        cuhk03_labeled=False,
+        cuhk03_classic_split=False,
+        **kwargs
     ):
         self.root = osp.abspath(osp.expanduser(root))
         self.dataset_dir = osp.join(self.root, self.dataset_dir)
@@ -96,11 +95,11 @@ class CUHK03(ImageDataset):
         # 2. create 20 classic splits (Li et al. CVPR'14)
         # 3. create new split (Zhong et al. CVPR'17)
         if osp.exists(self.imgs_labeled_dir) \
-                and osp.exists(self.imgs_detected_dir) \
-                and osp.exists(self.split_classic_det_json_path) \
-                and osp.exists(self.split_classic_lab_json_path) \
-                and osp.exists(self.split_new_det_json_path) \
-                and osp.exists(self.split_new_lab_json_path):
+           and osp.exists(self.imgs_detected_dir) \
+           and osp.exists(self.split_classic_det_json_path) \
+           and osp.exists(self.split_classic_lab_json_path) \
+           and osp.exists(self.split_new_det_json_path) \
+           and osp.exists(self.split_new_lab_json_path):
             return
 
         import h5py
@@ -121,11 +120,11 @@ class CUHK03(ImageDataset):
             return mat[ref][:].T
 
         def _process_images(img_refs, campid, pid, save_dir):
-            img_paths = []  # Note: some persons only have images for one view
+            img_paths = [] # Note: some persons only have images for one view
             for imgid, img_ref in enumerate(img_refs):
                 img = _deref(img_ref)
                 if img.size == 0 or img.ndim < 3:
-                    continue  # skip empty cell
+                    continue # skip empty cell
                 # images are saved with the following format, index-1 (ensure uniqueness)
                 # campid: index of camera pair (1-5)
                 # pid: index of person in 'campid'-th camera pair
@@ -175,7 +174,7 @@ class CUHK03(ImageDataset):
                     for img_path in img_paths:
                         camid = int(
                             osp.basename(img_path).split('_')[2]
-                        ) - 1  # make it 0-based
+                        ) - 1 # make it 0-based
                         test.append((img_path, num_test_pids, camid))
                     num_test_pids += 1
                     num_test_imgs += len(img_paths)
@@ -183,7 +182,7 @@ class CUHK03(ImageDataset):
                     for img_path in img_paths:
                         camid = int(
                             osp.basename(img_path).split('_')[2]
-                        ) - 1  # make it 0-based
+                        ) - 1 # make it 0-based
                         train.append((img_path, num_train_pids, camid))
                     num_train_pids += 1
                     num_train_imgs += len(img_paths)
@@ -236,7 +235,7 @@ class CUHK03(ImageDataset):
             unique_pids = set()
             for idx in idxs:
                 img_name = filelist[idx][0]
-                camid = int(img_name.split('_')[2]) - 1  # make it 0-based
+                camid = int(img_name.split('_')[2]) - 1 # make it 0-based
                 pid = pids[idx]
                 if relabel:
                     pid = pid2label[pid]
@@ -246,7 +245,7 @@ class CUHK03(ImageDataset):
             return tmp_set, len(unique_pids), len(idxs)
 
         def _extract_new_split(split_dict, img_dir):
-            train_idxs = split_dict['train_idx'].flatten() - 1  # index-0
+            train_idxs = split_dict['train_idx'].flatten() - 1 # index-0
             pids = split_dict['labels'].flatten()
             train_pids = set(pids[train_idxs])
             pid2label = {pid: label for label, pid in enumerate(train_pids)}

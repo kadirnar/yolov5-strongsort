@@ -1,7 +1,5 @@
 from __future__ import division, absolute_import
-
 from collections import defaultdict
-
 import torch
 
 __all__ = ['AverageMeter', 'MetricMeter']

@@ -1,9 +1,8 @@
 from __future__ import division, print_function, absolute_import
-
 import glob
 import os.path as osp
-
 from scipy.io import loadmat
+
 from torchreid.utils import read_json, write_json
 
 from ..dataset import ImageDataset
@@ -74,7 +73,7 @@ class GRID(ImageDataset):
         if not osp.exists(self.split_path):
             print('Creating 10 random splits')
             split_mat = loadmat(self.split_mat_path)
-            trainIdxAll = split_mat['trainIdxAll'][0]  # length = 10
+            trainIdxAll = split_mat['trainIdxAll'][0] # length = 10
             probe_img_paths = sorted(
                 glob.glob(osp.join(self.probe_path, '*.jpeg'))
             )
@@ -99,7 +98,7 @@ class GRID(ImageDataset):
                     img_idx = int(img_name.split('_')[0])
                     camid = int(
                         img_name.split('_')[1]
-                    ) - 1  # index starts from 0
+                    ) - 1 # index starts from 0
                     if img_idx in train_idxs:
                         train.append((img_path, idx2label[img_idx], camid))
                     else:
@@ -111,7 +110,7 @@ class GRID(ImageDataset):
                     img_idx = int(img_name.split('_')[0])
                     camid = int(
                         img_name.split('_')[1]
-                    ) - 1  # index starts from 0
+                    ) - 1 # index starts from 0
                     if img_idx in train_idxs:
                         train.append((img_path, idx2label[img_idx], camid))
                     else:

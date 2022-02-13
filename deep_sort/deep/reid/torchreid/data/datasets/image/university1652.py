@@ -1,9 +1,7 @@
 from __future__ import division, print_function, absolute_import
-
-import glob
 import os
+import glob
 import os.path as osp
-
 import gdown
 
 from ..dataset import ImageDataset

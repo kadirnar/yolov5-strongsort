@@ -1,5 +1,4 @@
 from __future__ import division, print_function, absolute_import
-
 import glob
 import os.path as osp
 import warnings
@@ -71,7 +70,7 @@ class DukeMTMCVidReID(VideoDataset):
             return split['tracklets']
 
         print('=> Generating split json file (** this might take a while **)')
-        pdirs = glob.glob(osp.join(dir_path, '*'))  # avoid .DS_Store
+        pdirs = glob.glob(osp.join(dir_path, '*')) # avoid .DS_Store
         print(
             'Processing "{}" with {} person identities'.format(
                 dir_path, len(pdirs)

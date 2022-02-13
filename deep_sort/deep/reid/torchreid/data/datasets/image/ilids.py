@@ -1,9 +1,8 @@
 from __future__ import division, print_function, absolute_import
-
 import copy
 import glob
-import os.path as osp
 import random
+import os.path as osp
 from collections import defaultdict
 
 from torchreid.utils import read_json, write_json
@@ -122,7 +121,7 @@ class iLIDS(ImageDataset):
             pid = int(img_name[:4])
             if pid2label is not None:
                 pid = pid2label[pid]
-            camid = int(img_name[4:7]) - 1  # 0-based
+            camid = int(img_name[4:7]) - 1 # 0-based
             img_path = osp.join(self.data_dir, img_name)
             data.append((img_path, pid, camid))
 

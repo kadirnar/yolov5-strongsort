@@ -1,5 +1,4 @@
 from __future__ import division, absolute_import
-
 import torch
 import torch.utils.model_zoo as model_zoo
 from torch import nn
@@ -118,14 +117,14 @@ class ResNetMid(nn.Module):
     """
 
     def __init__(
-            self,
-            num_classes,
-            loss,
-            block,
-            layers,
-            last_stride=2,
-            fc_dims=None,
-            **kwargs
+        self,
+        num_classes,
+        loss,
+        block,
+        layers,
+        last_stride=2,
+        fc_dims=None,
+        **kwargs
     ):
         self.inplanes = 64
         super(ResNetMid, self).__init__()

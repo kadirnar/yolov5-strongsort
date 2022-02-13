@@ -1,5 +1,4 @@
 from __future__ import division, print_function, absolute_import
-
 import os.path as osp
 
 from torchreid.utils import read_image
@@ -8,15 +7,15 @@ from torchreid.utils import read_image
 class Dataset(object):
 
     def __init__(
-            self,
-            train,
-            val,
-            test,
-            attr_dict,
-            transform=None,
-            mode='train',
-            verbose=True,
-            **kwargs
+        self,
+        train,
+        val,
+        test,
+        attr_dict,
+        transform=None,
+        mode='train',
+        verbose=True,
+        **kwargs
     ):
         self.train = train
         self.val = val

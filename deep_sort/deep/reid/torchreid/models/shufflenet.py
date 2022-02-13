@@ -1,5 +1,4 @@
 from __future__ import division, absolute_import
-
 import torch
 import torch.utils.model_zoo as model_zoo
 from torch import nn
@@ -10,7 +9,7 @@ __all__ = ['shufflenet']
 model_urls = {
     # training epoch = 90, top1 = 61.8
     'imagenet':
-        'https://mega.nz/#!RDpUlQCY!tr_5xBEkelzDjveIYBBcGcovNCOrgfiJO9kiidz9fZM',
+    'https://mega.nz/#!RDpUlQCY!tr_5xBEkelzDjveIYBBcGcovNCOrgfiJO9kiidz9fZM',
 }
 
 
@@ -35,12 +34,12 @@ class ChannelShuffle(nn.Module):
 class Bottleneck(nn.Module):
 
     def __init__(
-            self,
-            in_channels,
-            out_channels,
-            stride,
-            num_groups,
-            group_conv1x1=True
+        self,
+        in_channels,
+        out_channels,
+        stride,
+        num_groups,
+        group_conv1x1=True
     ):
         super(Bottleneck, self).__init__()
         assert stride in [1, 2], 'Warning: stride must be either 1 or 2'
@@ -194,6 +193,6 @@ def shufflenet(num_classes, loss='softmax', pretrained=True, **kwargs):
         import warnings
         warnings.warn(
             'The imagenet pretrained weights need to be manually downloaded from {}'
-                .format(model_urls['imagenet'])
+            .format(model_urls['imagenet'])
         )
     return model

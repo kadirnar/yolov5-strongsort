@@ -1,10 +1,8 @@
 from __future__ import print_function, absolute_import
-
-import os.path as osp
-import shutil
-
-import cv2
 import numpy as np
+import shutil
+import os.path as osp
+import cv2
 
 from .tools import mkdir_if_missing
 
@@ -12,13 +10,13 @@ __all__ = ['visualize_ranked_results']
 
 GRID_SPACING = 10
 QUERY_EXTRA_SPACING = 90
-BW = 5  # border width
+BW = 5 # border width
 GREEN = (0, 255, 0)
 RED = (0, 0, 255)
 
 
 def visualize_ranked_results(
-        distmat, dataset, data_type, width=128, height=256, save_dir='', topk=10
+    distmat, dataset, data_type, width=128, height=256, save_dir='', topk=10
 ):
     """Visualizes ranked results.
 
@@ -73,7 +71,7 @@ def visualize_ranked_results(
         else:
             dst = osp.join(
                 dst, prefix + '_top' + str(rank).zfill(3) + '_name_' +
-                     osp.basename(src)
+                osp.basename(src)
             )
             shutil.copy(src, dst)
 
@@ -95,7 +93,7 @@ def visualize_ranked_results(
             grid_img = 255 * np.ones(
                 (
                     height,
-                    num_cols * width + topk * GRID_SPACING + QUERY_EXTRA_SPACING, 3
+                    num_cols*width + topk*GRID_SPACING + QUERY_EXTRA_SPACING, 3
                 ),
                 dtype=np.uint8
             )
@@ -128,10 +126,10 @@ def visualize_ranked_results(
                         value=border_color
                     )
                     gimg = cv2.resize(gimg, (width, height))
-                    start = rank_idx * width + rank_idx * GRID_SPACING + QUERY_EXTRA_SPACING
+                    start = rank_idx*width + rank_idx*GRID_SPACING + QUERY_EXTRA_SPACING
                     end = (
-                                  rank_idx + 1
-                          ) * width + rank_idx * GRID_SPACING + QUERY_EXTRA_SPACING
+                        rank_idx+1
+                    ) * width + rank_idx*GRID_SPACING + QUERY_EXTRA_SPACING
                     grid_img[:, start:end, :] = gimg
                 else:
                     _cp_img_to(
@@ -150,7 +148,7 @@ def visualize_ranked_results(
             imname = osp.basename(osp.splitext(qimg_path_name)[0])
             cv2.imwrite(osp.join(save_dir, imname + '.jpg'), grid_img)
 
-        if (q_idx + 1) % 100 == 0:
+        if (q_idx+1) % 100 == 0:
             print('- done {}/{}'.format(q_idx + 1, num_q))
 
     print('Done. Images have been saved to "{}" ...'.format(save_dir))

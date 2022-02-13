@@ -1,8 +1,6 @@
 from __future__ import division, absolute_import
-
 import math
 from collections import OrderedDict
-
 import torch.nn as nn
 from torch.utils import model_zoo
 
@@ -18,7 +16,7 @@ pretrained_settings = {
     'senet154': {
         'imagenet': {
             'url':
-                'http://data.lip6.fr/cadene/pretrainedmodels/senet154-c7b49a05.pth',
+            'http://data.lip6.fr/cadene/pretrainedmodels/senet154-c7b49a05.pth',
             'input_space': 'RGB',
             'input_size': [3, 224, 224],
             'input_range': [0, 1],
@@ -30,7 +28,7 @@ pretrained_settings = {
     'se_resnet50': {
         'imagenet': {
             'url':
-                'http://data.lip6.fr/cadene/pretrainedmodels/se_resnet50-ce0d4300.pth',
+            'http://data.lip6.fr/cadene/pretrainedmodels/se_resnet50-ce0d4300.pth',
             'input_space': 'RGB',
             'input_size': [3, 224, 224],
             'input_range': [0, 1],
@@ -42,7 +40,7 @@ pretrained_settings = {
     'se_resnet101': {
         'imagenet': {
             'url':
-                'http://data.lip6.fr/cadene/pretrainedmodels/se_resnet101-7e38fcc6.pth',
+            'http://data.lip6.fr/cadene/pretrainedmodels/se_resnet101-7e38fcc6.pth',
             'input_space': 'RGB',
             'input_size': [3, 224, 224],
             'input_range': [0, 1],
@@ -54,7 +52,7 @@ pretrained_settings = {
     'se_resnet152': {
         'imagenet': {
             'url':
-                'http://data.lip6.fr/cadene/pretrainedmodels/se_resnet152-d17c99b7.pth',
+            'http://data.lip6.fr/cadene/pretrainedmodels/se_resnet152-d17c99b7.pth',
             'input_space': 'RGB',
             'input_size': [3, 224, 224],
             'input_range': [0, 1],
@@ -66,7 +64,7 @@ pretrained_settings = {
     'se_resnext50_32x4d': {
         'imagenet': {
             'url':
-                'http://data.lip6.fr/cadene/pretrainedmodels/se_resnext50_32x4d-a260b3a4.pth',
+            'http://data.lip6.fr/cadene/pretrainedmodels/se_resnext50_32x4d-a260b3a4.pth',
             'input_space': 'RGB',
             'input_size': [3, 224, 224],
             'input_range': [0, 1],
@@ -78,7 +76,7 @@ pretrained_settings = {
     'se_resnext101_32x4d': {
         'imagenet': {
             'url':
-                'http://data.lip6.fr/cadene/pretrainedmodels/se_resnext101_32x4d-3b2fe3d8.pth',
+            'http://data.lip6.fr/cadene/pretrainedmodels/se_resnext101_32x4d-3b2fe3d8.pth',
             'input_space': 'RGB',
             'input_size': [3, 224, 224],
             'input_range': [0, 1],
@@ -149,7 +147,7 @@ class SEBottleneck(Bottleneck):
     expansion = 4
 
     def __init__(
-            self, inplanes, planes, groups, reduction, stride=1, downsample=None
+        self, inplanes, planes, groups, reduction, stride=1, downsample=None
     ):
         super(SEBottleneck, self).__init__()
         self.conv1 = nn.Conv2d(inplanes, planes * 2, kernel_size=1, bias=False)
@@ -183,7 +181,7 @@ class SEResNetBottleneck(Bottleneck):
     expansion = 4
 
     def __init__(
-            self, inplanes, planes, groups, reduction, stride=1, downsample=None
+        self, inplanes, planes, groups, reduction, stride=1, downsample=None
     ):
         super(SEResNetBottleneck, self).__init__()
         self.conv1 = nn.Conv2d(
@@ -212,17 +210,17 @@ class SEResNeXtBottleneck(Bottleneck):
     expansion = 4
 
     def __init__(
-            self,
-            inplanes,
-            planes,
-            groups,
-            reduction,
-            stride=1,
-            downsample=None,
-            base_width=4
+        self,
+        inplanes,
+        planes,
+        groups,
+        reduction,
+        stride=1,
+        downsample=None,
+        base_width=4
     ):
         super(SEResNeXtBottleneck, self).__init__()
-        width = int(math.floor(planes * (base_width / 64.)) * groups)
+        width = int(math.floor(planes * (base_width/64.)) * groups)
         self.conv1 = nn.Conv2d(
             inplanes, width, kernel_size=1, bias=False, stride=1
         )
@@ -262,21 +260,21 @@ class SENet(nn.Module):
     """
 
     def __init__(
-            self,
-            num_classes,
-            loss,
-            block,
-            layers,
-            groups,
-            reduction,
-            dropout_p=0.2,
-            inplanes=128,
-            input_3x3=True,
-            downsample_kernel_size=3,
-            downsample_padding=1,
-            last_stride=2,
-            fc_dims=None,
-            **kwargs
+        self,
+        num_classes,
+        loss,
+        block,
+        layers,
+        groups,
+        reduction,
+        dropout_p=0.2,
+        inplanes=128,
+        input_3x3=True,
+        downsample_kernel_size=3,
+        downsample_padding=1,
+        last_stride=2,
+        fc_dims=None,
+        **kwargs
     ):
         """
         Parameters
@@ -416,15 +414,15 @@ class SENet(nn.Module):
         self.classifier = nn.Linear(self.feature_dim, num_classes)
 
     def _make_layer(
-            self,
-            block,
-            planes,
-            blocks,
-            groups,
-            reduction,
-            stride=1,
-            downsample_kernel_size=1,
-            downsample_padding=0
+        self,
+        block,
+        planes,
+        blocks,
+        groups,
+        reduction,
+        stride=1,
+        downsample_kernel_size=1,
+        downsample_padding=0
     ):
         downsample = None
         if stride != 1 or self.inplanes != planes * block.expansion:
@@ -659,13 +657,13 @@ def se_resnext50_32x4d(num_classes, loss='softmax', pretrained=True, **kwargs):
     )
     if pretrained:
         model_url = pretrained_settings['se_resnext50_32x4d']['imagenet']['url'
-        ]
+                                                                          ]
         init_pretrained_weights(model, model_url)
     return model
 
 
 def se_resnext101_32x4d(
-        num_classes, loss='softmax', pretrained=True, **kwargs
+    num_classes, loss='softmax', pretrained=True, **kwargs
 ):
     model = SENet(
         num_classes=num_classes,

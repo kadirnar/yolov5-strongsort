@@ -1,12 +1,10 @@
 from __future__ import division, print_function, absolute_import
-
-import os.path as osp
 import pickle
 import shutil
+import os.path as osp
 import warnings
-from collections import OrderedDict
 from functools import partial
-
+from collections import OrderedDict
 import torch
 import torch.nn as nn
 
@@ -20,7 +18,7 @@ __all__ = [
 
 
 def save_checkpoint(
-        state, save_dir, is_best=False, remove_module_from_keys=False
+    state, save_dir, is_best=False, remove_module_from_keys=False
 ):
     r"""Saves checkpoint.
 
@@ -137,14 +135,14 @@ def resume_from_checkpoint(fpath, model, optimizer=None, scheduler=None):
 
 
 def adjust_learning_rate(
-        optimizer,
-        base_lr,
-        epoch,
-        stepsize=20,
-        gamma=0.1,
-        linear_decay=False,
-        final_lr=0,
-        max_epoch=100
+    optimizer,
+    base_lr,
+    epoch,
+    stepsize=20,
+    gamma=0.1,
+    linear_decay=False,
+    final_lr=0,
+    max_epoch=100
 ):
     r"""Adjusts learning rate.
 
@@ -153,10 +151,10 @@ def adjust_learning_rate(
     if linear_decay:
         # linearly decay learning rate from base_lr to final_lr
         frac_done = epoch / max_epoch
-        lr = frac_done * final_lr + (1. - frac_done) * base_lr
+        lr = frac_done*final_lr + (1.-frac_done) * base_lr
     else:
         # decay learning rate by gamma for every stepsize
-        lr = base_lr * (gamma ** (epoch // stepsize))
+        lr = base_lr * (gamma**(epoch // stepsize))
 
     for param_group in optimizer.param_groups:
         param_group['lr'] = lr
@@ -284,7 +282,7 @@ def load_pretrained_weights(model, weight_path):
 
     for k, v in state_dict.items():
         if k.startswith('module.'):
-            k = k[7:]  # discard module.
+            k = k[7:] # discard module.
 
         if k in model_dict and model_dict[k].size() == v.size():
             new_state_dict[k] = v
@@ -304,11 +302,11 @@ def load_pretrained_weights(model, weight_path):
     else:
         print(
             'Successfully loaded pretrained weights from "{}"'.
-                format(weight_path)
+            format(weight_path)
         )
         if len(discarded_layers) > 0:
             print(
                 '** The following layers are discarded '
                 'due to unmatched keys or layer size: {}'.
-                    format(discarded_layers)
+                format(discarded_layers)
             )

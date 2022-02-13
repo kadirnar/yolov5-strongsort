@@ -1,13 +1,13 @@
 from __future__ import absolute_import
-
 import numpy as np
 import torch
 import torchvision.transforms as T
 from PIL import Image
-from torchreid.models import build_model
+
 from torchreid.utils import (
     check_isfile, load_pretrained_weights, compute_model_complexity
 )
+from torchreid.models import build_model
 
 
 class FeatureExtractor(object):
@@ -57,15 +57,15 @@ class FeatureExtractor(object):
     """
 
     def __init__(
-            self,
-            model_name='',
-            model_path='',
-            image_size=(256, 128),
-            pixel_mean=[0.485, 0.456, 0.406],
-            pixel_std=[0.229, 0.224, 0.225],
-            pixel_norm=True,
-            device='cuda',
-            verbose=True
+        self,
+        model_name='',
+        model_path='',
+        image_size=(256, 128),
+        pixel_mean=[0.485, 0.456, 0.406],
+        pixel_std=[0.229, 0.224, 0.225],
+        pixel_norm=True,
+        device='cuda',
+        verbose=True
     ):
         # Build model
         model = build_model(

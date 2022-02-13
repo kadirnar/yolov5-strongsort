@@ -1,7 +1,6 @@
 from __future__ import division, print_function, absolute_import
-
-import os.path as osp
 import random
+import os.path as osp
 
 from torchreid.utils import read_json, write_json
 
@@ -48,8 +47,8 @@ class PRID(ImageDataset):
         if split_id >= len(splits):
             raise ValueError(
                 'split_id exceeds range, received {}, but expected between 0 and {}'
-                    .format(split_id,
-                            len(splits) - 1)
+                .format(split_id,
+                        len(splits) - 1)
             )
         split = splits[split_id]
 

@@ -1,5 +1,4 @@
 from __future__ import division, absolute_import
-
 import torch
 import torch.nn as nn
 import torch.utils.model_zoo as model_zoo
@@ -13,7 +12,7 @@ pretrained_settings = {
     'inceptionv4': {
         'imagenet': {
             'url':
-                'http://data.lip6.fr/cadene/pretrainedmodels/inceptionv4-8e4777a0.pth',
+            'http://data.lip6.fr/cadene/pretrainedmodels/inceptionv4-8e4777a0.pth',
             'input_space': 'RGB',
             'input_size': [3, 299, 299],
             'input_range': [0, 1],
@@ -23,7 +22,7 @@ pretrained_settings = {
         },
         'imagenet+background': {
             'url':
-                'http://data.lip6.fr/cadene/pretrainedmodels/inceptionv4-8e4777a0.pth',
+            'http://data.lip6.fr/cadene/pretrainedmodels/inceptionv4-8e4777a0.pth',
             'input_space': 'RGB',
             'input_size': [3, 299, 299],
             'input_range': [0, 1],
@@ -46,11 +45,11 @@ class BasicConv2d(nn.Module):
             stride=stride,
             padding=padding,
             bias=False
-        )  # verify bias false
+        ) # verify bias false
         self.bn = nn.BatchNorm2d(
             out_planes,
-            eps=0.001,  # value found in tensorflow
-            momentum=0.1,  # default pytorch value
+            eps=0.001, # value found in tensorflow
+            momentum=0.1, # default pytorch value
             affine=True
         )
         self.relu = nn.ReLU(inplace=True)
@@ -324,7 +323,7 @@ class InceptionV4(nn.Module):
             Inception_A(),
             Inception_A(),
             Inception_A(),
-            Reduction_A(),  # Mixed_6a
+            Reduction_A(), # Mixed_6a
             Inception_B(),
             Inception_B(),
             Inception_B(),
@@ -332,7 +331,7 @@ class InceptionV4(nn.Module):
             Inception_B(),
             Inception_B(),
             Inception_B(),
-            Reduction_B(),  # Mixed_7a
+            Reduction_B(), # Mixed_7a
             Inception_C(),
             Inception_C(),
             Inception_C()

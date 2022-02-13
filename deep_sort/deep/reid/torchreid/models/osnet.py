@@ -1,7 +1,5 @@
 from __future__ import division, absolute_import
-
 import warnings
-
 import torch
 from torch import nn
 from torch.nn import functional as F
@@ -12,15 +10,15 @@ __all__ = [
 
 pretrained_urls = {
     'osnet_x1_0':
-        'https://drive.google.com/uc?id=1LaG1EJpHrxdAxKnSCJ_i0u-nbxSAeiFY',
+    'https://drive.google.com/uc?id=1LaG1EJpHrxdAxKnSCJ_i0u-nbxSAeiFY',
     'osnet_x0_75':
-        'https://drive.google.com/uc?id=1uwA9fElHOk3ZogwbeY5GkLI6QPTX70Hq',
+    'https://drive.google.com/uc?id=1uwA9fElHOk3ZogwbeY5GkLI6QPTX70Hq',
     'osnet_x0_5':
-        'https://drive.google.com/uc?id=16DGLbZukvVYgINws8u8deSaOqjybZ83i',
+    'https://drive.google.com/uc?id=16DGLbZukvVYgINws8u8deSaOqjybZ83i',
     'osnet_x0_25':
-        'https://drive.google.com/uc?id=1rb8UN5ZzPKRc_xvtHlyDh-cSz88YX9hs',
+    'https://drive.google.com/uc?id=1rb8UN5ZzPKRc_xvtHlyDh-cSz88YX9hs',
     'osnet_ibn_x1_0':
-        'https://drive.google.com/uc?id=1sr90V6irlYYDd4_4ISU2iruoRG8J__6l'
+    'https://drive.google.com/uc?id=1sr90V6irlYYDd4_4ISU2iruoRG8J__6l'
 }
 
 
@@ -31,14 +29,14 @@ class ConvLayer(nn.Module):
     """Convolution layer (conv + bn + relu)."""
 
     def __init__(
-            self,
-            in_channels,
-            out_channels,
-            kernel_size,
-            stride=1,
-            padding=0,
-            groups=1,
-            IN=False
+        self,
+        in_channels,
+        out_channels,
+        kernel_size,
+        stride=1,
+        padding=0,
+        groups=1,
+        IN=False
     ):
         super(ConvLayer, self).__init__()
         self.conv = nn.Conv2d(
@@ -165,13 +163,13 @@ class ChannelGate(nn.Module):
     """A mini-network that generates channel-wise gates conditioned on input tensor."""
 
     def __init__(
-            self,
-            in_channels,
-            num_gates=None,
-            return_gates=False,
-            gate_activation='sigmoid',
-            reduction=16,
-            layer_norm=False
+        self,
+        in_channels,
+        num_gates=None,
+        return_gates=False,
+        gate_activation='sigmoid',
+        reduction=16,
+        layer_norm=False
     ):
         super(ChannelGate, self).__init__()
         if num_gates is None:
@@ -226,12 +224,12 @@ class OSBlock(nn.Module):
     """Omni-scale feature learning block."""
 
     def __init__(
-            self,
-            in_channels,
-            out_channels,
-            IN=False,
-            bottleneck_reduction=4,
-            **kwargs
+        self,
+        in_channels,
+        out_channels,
+        IN=False,
+        bottleneck_reduction=4,
+        **kwargs
     ):
         super(OSBlock, self).__init__()
         mid_channels = out_channels // bottleneck_reduction
@@ -291,15 +289,15 @@ class OSNet(nn.Module):
     """
 
     def __init__(
-            self,
-            num_classes,
-            blocks,
-            layers,
-            channels,
-            feature_dim=512,
-            loss='softmax',
-            IN=False,
-            **kwargs
+        self,
+        num_classes,
+        blocks,
+        layers,
+        channels,
+        feature_dim=512,
+        loss='softmax',
+        IN=False,
+        **kwargs
     ):
         super(OSNet, self).__init__()
         num_blocks = len(blocks)
@@ -345,13 +343,13 @@ class OSNet(nn.Module):
         self._init_params()
 
     def _make_layer(
-            self,
-            block,
-            layer,
-            in_channels,
-            out_channels,
-            reduce_spatial_size,
-            IN=False
+        self,
+        block,
+        layer,
+        in_channels,
+        out_channels,
+        reduce_spatial_size,
+        IN=False
     ):
         layers = []
 
@@ -488,7 +486,7 @@ def init_pretrained_weights(model, key=''):
 
     for k, v in state_dict.items():
         if k.startswith('module.'):
-            k = k[7:]  # discard module.
+            k = k[7:] # discard module.
 
         if k in model_dict and model_dict[k].size() == v.size():
             new_state_dict[k] = v
@@ -508,13 +506,13 @@ def init_pretrained_weights(model, key=''):
     else:
         print(
             'Successfully loaded imagenet pretrained weights from "{}"'.
-                format(cached_file)
+            format(cached_file)
         )
         if len(discarded_layers) > 0:
             print(
                 '** The following layers are discarded '
                 'due to unmatched keys or layer size: {}'.
-                    format(discarded_layers)
+                format(discarded_layers)
             )
 
 
@@ -582,7 +580,7 @@ def osnet_x0_25(num_classes=1000, pretrained=True, loss='softmax', **kwargs):
 
 
 def osnet_ibn_x1_0(
-        num_classes=1000, pretrained=True, loss='softmax', **kwargs
+    num_classes=1000, pretrained=True, loss='softmax', **kwargs
 ):
     # standard size (width x1.0) + IBN layer
     # Ref: Pan et al. Two at Once: Enhancing Learning and Generalization Capacities via IBN-Net. ECCV, 2018.

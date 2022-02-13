@@ -1,5 +1,4 @@
 from __future__ import division, absolute_import
-
 import torch
 from torch import nn
 from torch.nn import functional as F
@@ -14,13 +13,13 @@ class ConvLayer(nn.Module):
     """Convolution layer."""
 
     def __init__(
-            self,
-            in_channels,
-            out_channels,
-            kernel_size,
-            stride=1,
-            padding=0,
-            groups=1
+        self,
+        in_channels,
+        out_channels,
+        kernel_size,
+        stride=1,
+        padding=0,
+        groups=1
     ):
         super(ConvLayer, self).__init__()
         self.conv = nn.Conv2d(
@@ -144,13 +143,13 @@ class ChannelGate(nn.Module):
     """A mini-network that generates channel-wise gates conditioned on input."""
 
     def __init__(
-            self,
-            in_channels,
-            num_gates=None,
-            return_gates=False,
-            gate_activation='sigmoid',
-            reduction=16,
-            layer_norm=False
+        self,
+        in_channels,
+        num_gates=None,
+        return_gates=False,
+        gate_activation='sigmoid',
+        reduction=16,
+        layer_norm=False
     ):
         super(ChannelGate, self).__init__()
         if num_gates is None:
@@ -251,7 +250,7 @@ class OSBlock(nn.Module):
 class BaseNet(nn.Module):
 
     def _make_layer(
-            self, block, layer, in_channels, out_channels, reduce_spatial_size
+        self, block, layer, in_channels, out_channels, reduce_spatial_size
     ):
         layers = []
 
@@ -316,15 +315,15 @@ class BaseNet(nn.Module):
 class OSNet(BaseNet):
 
     def __init__(
-            self,
-            num_classes,
-            blocks,
-            layers,
-            channels,
-            feature_dim=512,
-            loss='softmax',
-            pool='avg',
-            **kwargs
+        self,
+        num_classes,
+        blocks,
+        layers,
+        channels,
+        feature_dim=512,
+        loss='softmax',
+        pool='avg',
+        **kwargs
     ):
         super(OSNet, self).__init__()
         num_blocks = len(blocks)

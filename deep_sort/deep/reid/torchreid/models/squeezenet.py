@@ -2,7 +2,6 @@
 Code source: https://github.com/pytorch/vision
 """
 from __future__ import division, absolute_import
-
 import torch
 import torch.nn as nn
 import torch.utils.model_zoo as model_zoo
@@ -11,16 +10,16 @@ __all__ = ['squeezenet1_0', 'squeezenet1_1', 'squeezenet1_0_fc512']
 
 model_urls = {
     'squeezenet1_0':
-        'https://download.pytorch.org/models/squeezenet1_0-a815701f.pth',
+    'https://download.pytorch.org/models/squeezenet1_0-a815701f.pth',
     'squeezenet1_1':
-        'https://download.pytorch.org/models/squeezenet1_1-f364aa15.pth',
+    'https://download.pytorch.org/models/squeezenet1_1-f364aa15.pth',
 }
 
 
 class Fire(nn.Module):
 
     def __init__(
-            self, inplanes, squeeze_planes, expand1x1_planes, expand3x3_planes
+        self, inplanes, squeeze_planes, expand1x1_planes, expand3x3_planes
     ):
         super(Fire, self).__init__()
         self.inplanes = inplanes
@@ -59,13 +58,13 @@ class SqueezeNet(nn.Module):
     """
 
     def __init__(
-            self,
-            num_classes,
-            loss,
-            version=1.0,
-            fc_dims=None,
-            dropout_p=None,
-            **kwargs
+        self,
+        num_classes,
+        loss,
+        version=1.0,
+        fc_dims=None,
+        dropout_p=None,
+        **kwargs
     ):
         super(SqueezeNet, self).__init__()
         self.loss = loss
@@ -213,7 +212,7 @@ def squeezenet1_0(num_classes, loss='softmax', pretrained=True, **kwargs):
 
 
 def squeezenet1_0_fc512(
-        num_classes, loss='softmax', pretrained=True, **kwargs
+    num_classes, loss='softmax', pretrained=True, **kwargs
 ):
     model = SqueezeNet(
         num_classes,

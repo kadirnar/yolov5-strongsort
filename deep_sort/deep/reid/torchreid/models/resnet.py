@@ -2,7 +2,6 @@
 Code source: https://github.com/pytorch/vision
 """
 from __future__ import division, absolute_import
-
 import torch.utils.model_zoo as model_zoo
 from torch import nn
 
@@ -13,19 +12,19 @@ __all__ = [
 
 model_urls = {
     'resnet18':
-        'https://download.pytorch.org/models/resnet18-5c106cde.pth',
+    'https://download.pytorch.org/models/resnet18-5c106cde.pth',
     'resnet34':
-        'https://download.pytorch.org/models/resnet34-333f7ec4.pth',
+    'https://download.pytorch.org/models/resnet34-333f7ec4.pth',
     'resnet50':
-        'https://download.pytorch.org/models/resnet50-19c8e357.pth',
+    'https://download.pytorch.org/models/resnet50-19c8e357.pth',
     'resnet101':
-        'https://download.pytorch.org/models/resnet101-5d3b4d8f.pth',
+    'https://download.pytorch.org/models/resnet101-5d3b4d8f.pth',
     'resnet152':
-        'https://download.pytorch.org/models/resnet152-b121ed2d.pth',
+    'https://download.pytorch.org/models/resnet152-b121ed2d.pth',
     'resnext50_32x4d':
-        'https://download.pytorch.org/models/resnext50_32x4d-7cdf4587.pth',
+    'https://download.pytorch.org/models/resnext50_32x4d-7cdf4587.pth',
     'resnext101_32x8d':
-        'https://download.pytorch.org/models/resnext101_32x8d-8ba56ff5.pth',
+    'https://download.pytorch.org/models/resnext101_32x8d-8ba56ff5.pth',
 }
 
 
@@ -54,15 +53,15 @@ class BasicBlock(nn.Module):
     expansion = 1
 
     def __init__(
-            self,
-            inplanes,
-            planes,
-            stride=1,
-            downsample=None,
-            groups=1,
-            base_width=64,
-            dilation=1,
-            norm_layer=None
+        self,
+        inplanes,
+        planes,
+        stride=1,
+        downsample=None,
+        groups=1,
+        base_width=64,
+        dilation=1,
+        norm_layer=None
     ):
         super(BasicBlock, self).__init__()
         if norm_layer is None:
@@ -107,20 +106,20 @@ class Bottleneck(nn.Module):
     expansion = 4
 
     def __init__(
-            self,
-            inplanes,
-            planes,
-            stride=1,
-            downsample=None,
-            groups=1,
-            base_width=64,
-            dilation=1,
-            norm_layer=None
+        self,
+        inplanes,
+        planes,
+        stride=1,
+        downsample=None,
+        groups=1,
+        base_width=64,
+        dilation=1,
+        norm_layer=None
     ):
         super(Bottleneck, self).__init__()
         if norm_layer is None:
             norm_layer = nn.BatchNorm2d
-        width = int(planes * (base_width / 64.)) * groups
+        width = int(planes * (base_width/64.)) * groups
         # Both self.conv2 and self.downsample layers downsample the input when stride != 1
         self.conv1 = conv1x1(inplanes, width)
         self.bn1 = norm_layer(width)
@@ -174,20 +173,20 @@ class ResNet(nn.Module):
     """
 
     def __init__(
-            self,
-            num_classes,
-            loss,
-            block,
-            layers,
-            zero_init_residual=False,
-            groups=1,
-            width_per_group=64,
-            replace_stride_with_dilation=None,
-            norm_layer=None,
-            last_stride=2,
-            fc_dims=None,
-            dropout_p=None,
-            **kwargs
+        self,
+        num_classes,
+        loss,
+        block,
+        layers,
+        zero_init_residual=False,
+        groups=1,
+        width_per_group=64,
+        replace_stride_with_dilation=None,
+        norm_layer=None,
+        last_stride=2,
+        fc_dims=None,
+        dropout_p=None,
+        **kwargs
     ):
         super(ResNet, self).__init__()
         if norm_layer is None:
@@ -205,7 +204,7 @@ class ResNet(nn.Module):
             raise ValueError(
                 "replace_stride_with_dilation should be None "
                 "or a 3-element tuple, got {}".
-                    format(replace_stride_with_dilation)
+                format(replace_stride_with_dilation)
             )
         self.groups = groups
         self.base_width = width_per_group

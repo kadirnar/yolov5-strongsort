@@ -1,6 +1,6 @@
 from __future__ import division, print_function, absolute_import
-
 import torch
+
 from torchreid.engine.image import ImageSoftmaxEngine
 
 
@@ -58,14 +58,14 @@ class VideoSoftmaxEngine(ImageSoftmaxEngine):
     """
 
     def __init__(
-            self,
-            datamanager,
-            model,
-            optimizer,
-            scheduler=None,
-            use_gpu=True,
-            label_smooth=True,
-            pooling_method='avg'
+        self,
+        datamanager,
+        model,
+        optimizer,
+        scheduler=None,
+        use_gpu=True,
+        label_smooth=True,
+        pooling_method='avg'
     ):
         super(VideoSoftmaxEngine, self).__init__(
             datamanager,

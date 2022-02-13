@@ -1,10 +1,8 @@
 from __future__ import division, print_function, absolute_import
-
 import math
-from collections import namedtuple, defaultdict
-from itertools import repeat
-
 import numpy as np
+from itertools import repeat
+from collections import namedtuple, defaultdict
 import torch
 
 __all__ = ['compute_model_complexity']
@@ -14,6 +12,7 @@ Utility
 
 
 def _ntuple(n):
+
     def parse(x):
         if isinstance(x, int):
             return tuple(repeat(x, n))
@@ -33,7 +32,7 @@ Convolution
 def hook_convNd(m, x, y):
     k = torch.prod(torch.Tensor(m.kernel_size)).item()
     cin = m.in_channels
-    flops_per_ele = k * cin  # + (k*cin-1)
+    flops_per_ele = k * cin # + (k*cin-1)
     if m.bias is not None:
         flops_per_ele += 1
     flops = flops_per_ele * y.numel() / m.groups
@@ -173,9 +172,9 @@ Normalization
 
 def hook_batchnormNd(m, x, y):
     num_ele = y.numel()
-    flops = 2 * num_ele  # mean and std
+    flops = 2 * num_ele # mean and std
     if m.affine:
-        flops += 2 * num_ele  # gamma and beta
+        flops += 2 * num_ele # gamma and beta
     return int(flops)
 
 
@@ -189,9 +188,9 @@ def hook_groupnorm(m, x, y):
 
 def hook_layernorm(m, x, y):
     num_ele = y.numel()
-    flops = 2 * num_ele  # mean and std
+    flops = 2 * num_ele # mean and std
     if m.elementwise_affine:
-        flops += 2 * num_ele  # gamma and beta
+        flops += 2 * num_ele # gamma and beta
     return int(flops)
 
 
@@ -201,7 +200,7 @@ Linear
 
 
 def hook_linear(m, x, y):
-    flops_per_ele = m.in_features  # + (m.in_features-1)
+    flops_per_ele = m.in_features # + (m.in_features-1)
     if m.bias is not None:
         flops_per_ele += 1
     flops = flops_per_ele * y.numel()
@@ -260,7 +259,7 @@ def _get_flops_counter(only_conv_linear):
 
 
 def compute_model_complexity(
-        model, input_size, verbose=False, only_conv_linear=True
+    model, input_size, verbose=False, only_conv_linear=True
 ):
     """Returns number of parameters and FLOPs.
 
@@ -320,7 +319,7 @@ def compute_model_complexity(
     input = torch.rand(input_size)
     if next(model.parameters()).is_cuda:
         input = input.cuda()
-    model(input)  # forward
+    model(input) # forward
 
     for handle in registered_handles:
         handle.remove()

@@ -19,13 +19,13 @@ log/
 You can run the following command in your terminal to get the average performance:
 $ python tools/parse_test_res.py log/eval_viper
 """
-import argparse
-import glob
 import os
 import re
+import glob
+import numpy as np
+import argparse
 from collections import defaultdict
 
-import numpy as np
 from torchreid.utils import check_isfile, listdir_nohidden
 
 

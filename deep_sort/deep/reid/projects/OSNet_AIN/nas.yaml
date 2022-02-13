@@ -12,12 +12,12 @@ nas:
 
 data:
   type: 'image'
-  sources: [ 'msmt17' ]
-  targets: [ 'market1501' ]
+  sources: ['msmt17']
+  targets: ['market1501']
   height: 256
   width: 128
   combineall: True
-  transforms: [ 'random_flip', 'color_jitter' ]
+  transforms: ['random_flip', 'color_jitter']
   save_dir: 'log/osnet_nas'
 
 loss:
@@ -31,7 +31,7 @@ train:
   max_epoch: 120
   batch_size: 512
   fixbase_epoch: 0
-  open_layers: [ 'classifier' ]
+  open_layers: ['classifier']
   lr_scheduler: 'cosine'
 
 test:

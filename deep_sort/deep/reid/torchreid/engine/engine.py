@@ -1,20 +1,19 @@
 from __future__ import division, print_function, absolute_import
-
-import datetime
-import os.path as osp
 import time
-from collections import OrderedDict
-
 import numpy as np
+import os.path as osp
+import datetime
+from collections import OrderedDict
 import torch
 from torch.nn import functional as F
 from torch.utils.tensorboard import SummaryWriter
+
 from torchreid import metrics
-from torchreid.losses import DeepSupervision
 from torchreid.utils import (
     MetricMeter, AverageMeter, re_ranking, open_all_layers, save_checkpoint,
     open_specified_layers, visualize_ranked_results
 )
+from torchreid.losses import DeepSupervision
 
 
 class Engine(object):
@@ -112,23 +111,23 @@ class Engine(object):
                 self._scheds[name].step()
 
     def run(
-            self,
-            save_dir='log',
-            max_epoch=0,
-            start_epoch=0,
-            print_freq=10,
-            fixbase_epoch=0,
-            open_layers=None,
-            start_eval=0,
-            eval_freq=-1,
-            test_only=False,
-            dist_metric='euclidean',
-            normalize_feature=False,
-            visrank=False,
-            visrank_topk=10,
-            use_metric_cuhk03=False,
-            ranks=[1, 5, 10, 20],
-            rerank=False
+        self,
+        save_dir='log',
+        max_epoch=0,
+        start_epoch=0,
+        print_freq=10,
+        fixbase_epoch=0,
+        open_layers=None,
+        start_eval=0,
+        eval_freq=-1,
+        test_only=False,
+        dist_metric='euclidean',
+        normalize_feature=False,
+        visrank=False,
+        visrank_topk=10,
+        use_metric_cuhk03=False,
+        ranks=[1, 5, 10, 20],
+        rerank=False
     ):
         r"""A unified pipeline for training and evaluating a model.
 
@@ -195,9 +194,9 @@ class Engine(object):
             )
 
             if (self.epoch + 1) >= start_eval \
-                    and eval_freq > 0 \
-                    and (self.epoch + 1) % eval_freq == 0 \
-                    and (self.epoch + 1) != self.max_epoch:
+               and eval_freq > 0 \
+               and (self.epoch+1) % eval_freq == 0 \
+               and (self.epoch + 1) != self.max_epoch:
                 rank1 = self.test(
                     dist_metric=dist_metric,
                     normalize_feature=normalize_feature,
@@ -250,9 +249,9 @@ class Engine(object):
             if (self.batch_idx + 1) % print_freq == 0:
                 nb_this_epoch = self.num_batches - (self.batch_idx + 1)
                 nb_future_epochs = (
-                                           self.max_epoch - (self.epoch + 1)
-                                   ) * self.num_batches
-                eta_seconds = batch_time.avg * (nb_this_epoch + nb_future_epochs)
+                    self.max_epoch - (self.epoch + 1)
+                ) * self.num_batches
+                eta_seconds = batch_time.avg * (nb_this_epoch+nb_future_epochs)
                 eta_str = str(datetime.timedelta(seconds=int(eta_seconds)))
                 print(
                     'epoch: [{0}/{1}][{2}/{3}]\t'
@@ -291,15 +290,15 @@ class Engine(object):
         raise NotImplementedError
 
     def test(
-            self,
-            dist_metric='euclidean',
-            normalize_feature=False,
-            visrank=False,
-            visrank_topk=10,
-            save_dir='',
-            use_metric_cuhk03=False,
-            ranks=[1, 5, 10, 20],
-            rerank=False
+        self,
+        dist_metric='euclidean',
+        normalize_feature=False,
+        visrank=False,
+        visrank_topk=10,
+        save_dir='',
+        use_metric_cuhk03=False,
+        ranks=[1, 5, 10, 20],
+        rerank=False
     ):
         r"""Tests model on target datasets.
 
@@ -344,18 +343,18 @@ class Engine(object):
 
     @torch.no_grad()
     def _evaluate(
-            self,
-            dataset_name='',
-            query_loader=None,
-            gallery_loader=None,
-            dist_metric='euclidean',
-            normalize_feature=False,
-            visrank=False,
-            visrank_topk=10,
-            save_dir='',
-            use_metric_cuhk03=False,
-            ranks=[1, 5, 10, 20],
-            rerank=False
+        self,
+        dataset_name='',
+        query_loader=None,
+        gallery_loader=None,
+        dist_metric='euclidean',
+        normalize_feature=False,
+        visrank=False,
+        visrank_topk=10,
+        save_dir='',
+        use_metric_cuhk03=False,
+        ranks=[1, 5, 10, 20],
+        rerank=False
     ):
         batch_time = AverageMeter()
 
@@ -455,7 +454,7 @@ class Engine(object):
         return imgs, pids, camids
 
     def two_stepped_transfer_learning(
-            self, epoch, fixbase_epoch, open_layers, model=None
+        self, epoch, fixbase_epoch, open_layers, model=None
     ):
         """Two-stepped transfer learning.
 

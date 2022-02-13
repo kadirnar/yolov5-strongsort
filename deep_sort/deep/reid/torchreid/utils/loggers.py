@@ -1,8 +1,7 @@
 from __future__ import absolute_import
-
 import os
-import os.path as osp
 import sys
+import os.path as osp
 
 from .tools import mkdir_if_missing
 
@@ -142,6 +141,6 @@ class RankLogger(object):
             from_where = 'source' if name in self.sources else 'target'
             print('{} ({})'.format(name, from_where))
             for epoch, rank1 in zip(
-                    self.logger[name]['epoch'], self.logger[name]['rank1']
+                self.logger[name]['epoch'], self.logger[name]['rank1']
             ):
                 print('- epoch {}\t rank1 {:.1%}'.format(epoch, rank1))

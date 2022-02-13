@@ -11,9 +11,7 @@ Paper: https://arxiv.org/abs/1908.03265
 }
 """
 from __future__ import print_function, absolute_import
-
 import math
-
 import torch
 from torch.optim.optimizer import Optimizer
 
@@ -21,13 +19,13 @@ from torch.optim.optimizer import Optimizer
 class RAdam(Optimizer):
 
     def __init__(
-            self,
-            params,
-            lr=1e-3,
-            betas=(0.9, 0.999),
-            eps=1e-8,
-            weight_decay=0,
-            degenerated_to_sgd=True
+        self,
+        params,
+        lr=1e-3,
+        betas=(0.9, 0.999),
+        eps=1e-8,
+        weight_decay=0,
+        degenerated_to_sgd=True
     ):
         if not 0.0 <= lr:
             raise ValueError("Invalid learning rate: {}".format(lr))
@@ -93,20 +91,20 @@ class RAdam(Optimizer):
                     N_sma, step_size = buffered[1], buffered[2]
                 else:
                     buffered[0] = state['step']
-                    beta2_t = beta2 ** state['step']
-                    N_sma_max = 2 / (1 - beta2) - 1
+                    beta2_t = beta2**state['step']
+                    N_sma_max = 2 / (1-beta2) - 1
                     N_sma = N_sma_max - 2 * state['step'
-                    ] * beta2_t / (1 - beta2_t)
+                                                  ] * beta2_t / (1-beta2_t)
                     buffered[1] = N_sma
 
                     # more conservative since it's an approximated value
                     if N_sma >= 5:
                         step_size = math.sqrt(
-                            (1 - beta2_t) * (N_sma - 4) / (N_sma_max - 4) *
-                            (N_sma - 2) / N_sma * N_sma_max / (N_sma_max - 2)
-                        ) / (1 - beta1 ** state['step'])
+                            (1-beta2_t) * (N_sma-4) / (N_sma_max-4) *
+                            (N_sma-2) / N_sma * N_sma_max / (N_sma_max-2)
+                        ) / (1 - beta1**state['step'])
                     elif self.degenerated_to_sgd:
-                        step_size = 1.0 / (1 - beta1 ** state['step'])
+                        step_size = 1.0 / (1 - beta1**state['step'])
                     else:
                         step_size = -1
                     buffered[2] = step_size
@@ -136,13 +134,13 @@ class RAdam(Optimizer):
 class PlainRAdam(Optimizer):
 
     def __init__(
-            self,
-            params,
-            lr=1e-3,
-            betas=(0.9, 0.999),
-            eps=1e-8,
-            weight_decay=0,
-            degenerated_to_sgd=True
+        self,
+        params,
+        lr=1e-3,
+        betas=(0.9, 0.999),
+        eps=1e-8,
+        weight_decay=0,
+        degenerated_to_sgd=True
     ):
         if not 0.0 <= lr:
             raise ValueError("Invalid learning rate: {}".format(lr))
@@ -203,9 +201,9 @@ class PlainRAdam(Optimizer):
                 exp_avg.mul_(beta1).add_(1 - beta1, grad)
 
                 state['step'] += 1
-                beta2_t = beta2 ** state['step']
-                N_sma_max = 2 / (1 - beta2) - 1
-                N_sma = N_sma_max - 2 * state['step'] * beta2_t / (1 - beta2_t)
+                beta2_t = beta2**state['step']
+                N_sma_max = 2 / (1-beta2) - 1
+                N_sma = N_sma_max - 2 * state['step'] * beta2_t / (1-beta2_t)
 
                 # more conservative since it's an approximated value
                 if N_sma >= 5:
@@ -214,9 +212,9 @@ class PlainRAdam(Optimizer):
                             -group['weight_decay'] * group['lr'], p_data_fp32
                         )
                     step_size = group['lr'] * math.sqrt(
-                        (1 - beta2_t) * (N_sma - 4) / (N_sma_max - 4) *
-                        (N_sma - 2) / N_sma * N_sma_max / (N_sma_max - 2)
-                    ) / (1 - beta1 ** state['step'])
+                        (1-beta2_t) * (N_sma-4) / (N_sma_max-4) *
+                        (N_sma-2) / N_sma * N_sma_max / (N_sma_max-2)
+                    ) / (1 - beta1**state['step'])
                     denom = exp_avg_sq.sqrt().add_(group['eps'])
                     p_data_fp32.addcdiv_(-step_size, exp_avg, denom)
                     p.data.copy_(p_data_fp32)
@@ -225,7 +223,7 @@ class PlainRAdam(Optimizer):
                         p_data_fp32.add_(
                             -group['weight_decay'] * group['lr'], p_data_fp32
                         )
-                    step_size = group['lr'] / (1 - beta1 ** state['step'])
+                    step_size = group['lr'] / (1 - beta1**state['step'])
                     p_data_fp32.add_(-step_size, exp_avg)
                     p.data.copy_(p_data_fp32)
 
@@ -235,13 +233,13 @@ class PlainRAdam(Optimizer):
 class AdamW(Optimizer):
 
     def __init__(
-            self,
-            params,
-            lr=1e-3,
-            betas=(0.9, 0.999),
-            eps=1e-8,
-            weight_decay=0,
-            warmup=0
+        self,
+        params,
+        lr=1e-3,
+        betas=(0.9, 0.999),
+        eps=1e-8,
+        weight_decay=0,
+        warmup=0
     ):
         if not 0.0 <= lr:
             raise ValueError("Invalid learning rate: {}".format(lr))
@@ -307,8 +305,8 @@ class AdamW(Optimizer):
                 exp_avg.mul_(beta1).add_(1 - beta1, grad)
 
                 denom = exp_avg_sq.sqrt().add_(group['eps'])
-                bias_correction1 = 1 - beta1 ** state['step']
-                bias_correction2 = 1 - beta2 ** state['step']
+                bias_correction1 = 1 - beta1**state['step']
+                bias_correction2 = 1 - beta2**state['step']
 
                 if group['warmup'] > state['step']:
                     scheduled_lr = 1e-8 + state['step'] * group['lr'] / group[

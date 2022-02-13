@@ -16,8 +16,12 @@
     with limited time cost.
 """
 
+import os
+import numpy as np
 import argparse
+import torch
 
+from utils import *
 from gnn_reranking import *
 
 parser = argparse.ArgumentParser(description='Reranking_is_GNN')
@@ -30,14 +34,14 @@ parser.add_argument(
 parser.add_argument(
     '--k1',
     type=int,
-    default=26,  # Market-1501
+    default=26, # Market-1501
     # default=60,   # Veri-776
     help='parameter k1'
 )
 parser.add_argument(
     '--k2',
     type=int,
-    default=7,  # Market-1501
+    default=7, # Market-1501
     # default=10,   # Veri-776
     help='parameter k2'
 )

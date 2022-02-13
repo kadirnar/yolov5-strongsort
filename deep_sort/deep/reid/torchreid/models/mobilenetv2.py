@@ -1,5 +1,4 @@
 from __future__ import division, absolute_import
-
 import torch.utils.model_zoo as model_zoo
 from torch import nn
 from torch.nn import functional as F
@@ -9,10 +8,10 @@ __all__ = ['mobilenetv2_x1_0', 'mobilenetv2_x1_4']
 model_urls = {
     # 1.0: top-1 71.3
     'mobilenetv2_x1_0':
-        'https://mega.nz/#!NKp2wAIA!1NH1pbNzY_M2hVk_hdsxNM1NUOWvvGPHhaNr-fASF6c',
+    'https://mega.nz/#!NKp2wAIA!1NH1pbNzY_M2hVk_hdsxNM1NUOWvvGPHhaNr-fASF6c',
     # 1.4: top-1 73.9
     'mobilenetv2_x1_4':
-        'https://mega.nz/#!RGhgEIwS!xN2s2ZdyqI6vQ3EwgmRXLEW3khr9tpXg96G9SUJugGk',
+    'https://mega.nz/#!RGhgEIwS!xN2s2ZdyqI6vQ3EwgmRXLEW3khr9tpXg96G9SUJugGk',
 }
 
 
@@ -80,13 +79,13 @@ class MobileNetV2(nn.Module):
     """
 
     def __init__(
-            self,
-            num_classes,
-            width_mult=1,
-            loss='softmax',
-            fc_dims=None,
-            dropout_p=None,
-            **kwargs
+        self,
+        num_classes,
+        width_mult=1,
+        loss='softmax',
+        fc_dims=None,
+        dropout_p=None,
+        **kwargs
     ):
         super(MobileNetV2, self).__init__()
         self.loss = loss
@@ -251,7 +250,7 @@ def mobilenetv2_x1_0(num_classes, loss, pretrained=True, **kwargs):
         import warnings
         warnings.warn(
             'The imagenet pretrained weights need to be manually downloaded from {}'
-                .format(model_urls['mobilenetv2_x1_0'])
+            .format(model_urls['mobilenetv2_x1_0'])
         )
     return model
 
@@ -270,6 +269,6 @@ def mobilenetv2_x1_4(num_classes, loss, pretrained=True, **kwargs):
         import warnings
         warnings.warn(
             'The imagenet pretrained weights need to be manually downloaded from {}'
-                .format(model_urls['mobilenetv2_x1_4'])
+            .format(model_urls['mobilenetv2_x1_4'])
         )
     return model

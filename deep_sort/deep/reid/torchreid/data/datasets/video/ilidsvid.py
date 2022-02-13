@@ -1,9 +1,8 @@
 from __future__ import division, print_function, absolute_import
-
 import glob
 import os.path as osp
-
 from scipy.io import loadmat
+
 from torchreid.utils import read_json, write_json
 
 from ..dataset import VideoDataset
@@ -51,8 +50,8 @@ class iLIDSVID(VideoDataset):
         if split_id >= len(splits):
             raise ValueError(
                 'split_id exceeds range, received {}, but expected between 0 and {}'
-                    .format(split_id,
-                            len(splits) - 1)
+                .format(split_id,
+                        len(splits) - 1)
             )
         split = splits[split_id]
         train_dirs, test_dirs = split['train'], split['test']
@@ -115,7 +114,7 @@ class iLIDSVID(VideoDataset):
 
             print(
                 'Totally {} splits are created, following Wang et al. ECCV\'14'
-                    .format(len(splits))
+                .format(len(splits))
             )
             print('Split file is saved to {}'.format(self.split_path))
             write_json(splits, self.split_path)

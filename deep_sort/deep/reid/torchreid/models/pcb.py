@@ -1,5 +1,4 @@
 from __future__ import division, absolute_import
-
 import torch.utils.model_zoo as model_zoo
 from torch import nn
 from torch.nn import functional as F
@@ -142,15 +141,15 @@ class PCB(nn.Module):
     """
 
     def __init__(
-            self,
-            num_classes,
-            loss,
-            block,
-            layers,
-            parts=6,
-            reduced_dim=256,
-            nonlinear='relu',
-            **kwargs
+        self,
+        num_classes,
+        loss,
+        block,
+        layers,
+        parts=6,
+        reduced_dim=256,
+        nonlinear='relu',
+        **kwargs
     ):
         self.inplanes = 64
         super(PCB, self).__init__()
