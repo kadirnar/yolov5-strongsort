@@ -1,10 +1,9 @@
-import sys
-
 import numpy as np
 import torch
+import sys
 
-from .sort.detection import Detection
 from .sort.nn_matching import NearestNeighborDistanceMetric
+from .sort.detection import Detection
 from .sort.tracker import Tracker
 
 sys.path.append('deep_sort/deep/reid')
@@ -66,7 +65,6 @@ class DeepSort(object):
         Convert bbox from xc_yc_w_h to xtl_ytl_w_h
     Thanks JieChen91@github.com for reporting this bug!
     """
-
     @staticmethod
     def _xywh_to_tlwh(bbox_xywh):
         if isinstance(bbox_xywh, np.ndarray):
@@ -93,9 +91,9 @@ class DeepSort(object):
         """
         x, y, w, h = bbox_tlwh
         x1 = max(int(x), 0)
-        x2 = min(int(x + w), self.width - 1)
+        x2 = min(int(x+w), self.width - 1)
         y1 = max(int(y), 0)
-        y2 = min(int(y + h), self.height - 1)
+        y2 = min(int(y+h), self.height - 1)
         return x1, y1, x2, y2
 
     def increment_ages(self):
