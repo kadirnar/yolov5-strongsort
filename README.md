@@ -23,13 +23,9 @@ pip install -r requirements.txt
 ### Yolov5 Model + Deep Sort Prediction
 
 ```
-python detect.py --source ../uav_videos/3.mp4 --show-vid --classes  4 --device 0
+python detect.py --source ../video/uav.mp4 --yolo_model yolov5x6.pt --deep_sort_model osnet_x1_0 --show-vid
 ```
 
-### Reference:
-
- - [YOLOv5](https://github.com/ultralytics/yolov5)
- - [Deep Sort](https://github.com/mikel-brostrom/Yolov5_DeepSort_Pytorch)
 
 ## Citations
 ```bibtex
@@ -39,3 +35,8 @@ python detect.py --source ../uav_videos/3.mp4 --show-vid --classes  4 --device 0
     howpublished = {\url{https://github.com/mikel-brostrom/Yolov5_DeepSort_Pytorch}},
     year={2020}
 }
+```
+### Reference:
+
+ - [YOLOv5](https://github.com/ultralytics/yolov5)
+ - [Deep Sort](https://github.com/mikel-brostrom/Yolov5_DeepSort_Pytorch)
