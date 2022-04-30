@@ -1,6 +1,6 @@
 <div align="center">
 <h1>
-  Yolov5-Lite: Minimal YOLOv5 + Deep Sort
+  Yolov5-DeepSort: Minimal YOLOv5 + Deep Sort
 </h1>
 
 <h4>
