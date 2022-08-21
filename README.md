@@ -1,6 +1,6 @@
 <div align="center">
 <h1>
-  Yolov5-DeepSort: Minimal YOLOv5 + Deep Sort
+  Yolov5-DeepSort: Minimal YOLOv5 + StrongSort
 </h1>
 
 <h4>
@@ -20,7 +20,7 @@ cd yolov5-lite
 pip install -r requirements.txt
 ```
 
-### Yolov5 Model + Deep Sort Prediction
+### Yolov5 Model + StrongSort Prediction
 
 ```
 python detect.py --source ../video/uav.mp4 --yolo_model yolov5x6.pt --deep_sort_model osnet_x1_0 --show-vid
@@ -29,11 +29,11 @@ python detect.py --source ../video/uav.mp4 --yolo_model yolov5x6.pt --deep_sort_
 
 ## Citations
 ```bibtex
-@misc{yolov5deepsort2020,
-    title={Real-time multi-object tracker using YOLOv5 and deep sort},
+@misc{yolov5-strongsort-osnet-2022,
+    title={Real-time multi-camera multi-object tracker using YOLOv5 and StrongSORT with OSNet},
     author={Mikel Broström},
-    howpublished = {\url{https://github.com/mikel-brostrom/Yolov5_DeepSort_Pytorch}},
-    year={2020}
+    howpublished = {\url{https://github.com/mikel-brostrom/Yolov5_StrongSORT_OSNet}},
+    year={2022}
 }
 ```
 ### Reference:
