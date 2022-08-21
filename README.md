@@ -10,7 +10,7 @@
 
 ## <div align="center">Overview</div>
 
-This repo is a shortened version of yolov5 codes and added deep sort algorithm.
+This repo is a shortened version of yolov5 codes and added StrongSort algorithm.
 
 ### Installation
 
