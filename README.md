@@ -4,7 +4,7 @@
 </h1>
 
 <h4>
-    <img width="700" alt="teaser" src="resources/uav.gif">
+    <img width="700" alt="teaser" src="doc/uav.gif">
 </h4>
 </div>
 
