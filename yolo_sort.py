@@ -1,4 +1,3 @@
-
 from yolov5.utils.general import non_max_suppression, scale_coords, xyxy2xywh
 from yolov5.utils.plots import Annotator, colors
 from yolov5.utils.torch_utils import select_device
@@ -115,3 +114,5 @@ class Yolov5Sort:
                     cv2.waitKey(1)  # 1 millisecond
                 
                 prev_frames[i] = curr_frames[i]
+
+Yolov5Sort(model_path='yolov5x.pt', device='cuda:0', confidence_threshold=0.5, image_size=640, config_path='osnet_x0_25_market1501.pt').yolo_tracker('test.mp4')
