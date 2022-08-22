@@ -23,14 +23,8 @@ pip install -r requirements.txt
 ### Yolov5 Model + StrongSort Prediction
 
 ```
-Yolov5Sort(
-  model_path='yolov5x.pt', 
-  device='cuda:0', 
-  confidence_threshold=0.5, 
-  image_size=640, 
-  config_path='osnet_x0_25_market1501.pt').yolo_tracker('test.mp4')
+python yolo_tracker.py --video_path test.mp4 --model_path yolov5m.pt --device cuda:0 --confidence_threshold 0.5 --image_size 640 --config_path osnet_x0_25_market1501.pt
 ```
-
 
 ## Citations
 ```bibtex

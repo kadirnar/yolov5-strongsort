@@ -1,7 +1,10 @@
-from yolov5.utils.general import non_max_suppression, scale_coords, xyxy2xywh
+from ast import arg
+from yolov5.utils.general import non_max_suppression, scale_coords, xyxy2xywh, increment_path
 from yolov5.utils.plots import Annotator, colors
 from yolov5.utils.torch_utils import select_device
 from yolov5.utils.dataloaders import LoadImages
+from pathlib import Path
+import argparse
 import torch 
 import cv2
 import os
@@ -13,6 +16,11 @@ os.environ["MKL_NUM_THREADS"] = "1"
 os.environ["VECLIB_MAXIMUM_THREADS"] = "1"
 os.environ["NUMEXPR_NUM_THREADS"] = "1"
 
+FILE = Path(__file__).resolve()
+ROOT = FILE.parents[0]  # yolov5 strongsort root directory
+ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
+
+
 from strong_sort.utils.parser import get_config
 from strong_sort.strong_sort import StrongSORT
 
@@ -20,13 +28,14 @@ from strong_sort.strong_sort import StrongSORT
 class Yolov5Sort:
     def __init__(
         self,
-        model_path: str,
-        device: str,
+        model_path: str = "yolov5m.pt",
+        config_path: str = 'osnet_x0_25_market1501.pt',
+        device: str = "cpu",
         confidence_threshold: float = 0.5,
         image_size: int = 640,
-        config_path: str = 'osnet_x0_25_market1501.pt',
         view_img: bool = True,
         augment: bool = False,
+        save_video: bool = False,
     ):
         self.model_path = model_path
         self.device = device
@@ -37,6 +46,7 @@ class Yolov5Sort:
         self.config_path = config_path
         self.view_img = view_img
         self.augment = augment
+        self.save_video = save_video
         
     def load_model(self):
         import yolov5
@@ -46,12 +56,13 @@ class Yolov5Sort:
         self.model = model
     
     def yolo_tracker(self, video_path):
-        dataset = LoadImages(video_path, self.image_size)   
-        # initialize StrongSORT
+        dataset = LoadImages(video_path, self.image_size)  
+        project=ROOT / 'runs/track'
+        save_dir = increment_path(Path(project) /  "exp", exist_ok=False)  # increment run
+        (save_dir / 'tracks' if False else save_dir).mkdir(parents=True, exist_ok=True)  # make dir 
         cfg = get_config()
         cfg.merge_from_file('strong_sort/configs/strong_sort.yaml')
 
-        # Create as many strong sort instances as there are video sources
         strongsort_list = []
         nr_sources=1
         for i in range(nr_sources):
@@ -71,8 +82,11 @@ class Yolov5Sort:
                 )
             )
             strongsort_list[i].model.warmup()
+            
         outputs = [None] * nr_sources
-        curr_frames, prev_frames = [None] * nr_sources, [None] * nr_sources         
+        vid_path, vid_writer = [None] * nr_sources, [None] * nr_sources
+        curr_frames, prev_frames = [None] * nr_sources, [None] * nr_sources   
+              
         for path, im, im0s, vid_cap, s in dataset:
             im = torch.from_numpy(im).to(self.device)
             im = im.float()  # uint8 to fp16/32
@@ -82,6 +96,7 @@ class Yolov5Sort:
 
             pred = self.model(im, size=self.image_size, augment=self.augment) 
             pred = non_max_suppression(pred, conf_thres=self.model.conf, iou_thres=self.model.iou, classes=self.model.classes, agnostic=self.model.agnostic)
+            save_path = str(save_dir / Path(path).name)
 
             for i, det in enumerate(pred):
                 curr_frames[i] = im0s
@@ -107,12 +122,48 @@ class Yolov5Sort:
                                 id = int(id)  # integer id
                                 label = label = "%s %.2f" % (self.model.names[int(cls)], conf)
                                 annotator.box_label(bboxes, label, color=colors(c, True))
-                # Stream results
-                im0 = annotator.result()
-                if self.view_img:
-                    cv2.imshow(str(path), im0)
-                    cv2.waitKey(1)  # 1 millisecond
-                
-                prev_frames[i] = curr_frames[i]
+            # Stream results
+            im0 = annotator.result()
+            if self.view_img:
+                cv2.imshow(str(path), im0)
+                cv2.waitKey(1)  # 1 millisecond
 
-Yolov5Sort(model_path='yolov5x.pt', device='cuda:0', confidence_threshold=0.5, image_size=640, config_path='osnet_x0_25_market1501.pt').yolo_tracker('test.mp4')
+            # Save results (image with detections)
+            if self.save_video:
+                if vid_path[i] != save_path:  # new video
+                    vid_path[i] = save_path
+                    if isinstance(vid_writer[i], cv2.VideoWriter):
+                        vid_writer[i].release()  # release previous video writer
+                    if vid_cap:  # video
+                        fps = vid_cap.get(cv2.CAP_PROP_FPS)
+                        w = int(vid_cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+                        h = int(vid_cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+                    else:  # stream
+                        fps, w, h = 30, im0.shape[1], im0.shape[0]
+                    save_path = str(Path(save_path).with_suffix('.mp4'))  # force *.mp4 suffix on results videos
+                    vid_writer[i] = cv2.VideoWriter(save_path, cv2.VideoWriter_fourcc(*'mp4v'), fps, (w, h))
+                vid_writer[i].write(im0)
+
+            prev_frames[i] = curr_frames[i]
+
+
+def parse_arguments():
+    parser = argparse.ArgumentParser(description='YOLO v5 video stream detector')
+    parser.add_argument('--model_path', type=str, default='yolov5m.pt', help='path to weights file')
+    parser.add_argument('--config_path', type=str, default='osnet_x0_25_market1501.pt', help='path to configuration file')
+    parser.add_argument('--image_size', type=int, default=640, help='size of each image dimension')
+    parser.add_argument('--video_path', type=str, default='test.mp4', help='path to input video file')
+    parser.add_argument('--confidence', type=float, default=0.5, help='minimum probability to filter weak detections')
+    parser.add_argument('--device', default='cpu', help='device id (i.e. 0 or 0,1) or cpu')
+    parser.add_argument('--save_video', action='store_true', help='save results video')    
+    parser.add_argument('--view_img', action='store_true', help='display results')
+    parser.add_argument('--augment', action='store_true', help='augmented video')
+
+    return parser.parse_args()
+
+def run(args):
+    Yolov5Sort(args.model_path, args.config_path, args.device, args.confidence, args.image_size, args.view_img, args.augment, args.save_video).yolo_tracker(args.video_path)
+
+if __name__ == '__main__':
+    args = parse_arguments()
+    run(args)
