@@ -35,15 +35,7 @@ python yolo_tracker.py --video_path test.mp4 --model_path yolov5m.pt --device cu
   year={2022}
 }
 ```
-```bibtex
-@misc{yolov5-strongsort-osnet-2022,
-    title={Real-time multi-camera multi-object tracker using YOLOv5 and StrongSORT with OSNet},
-    author={Mikel Broström},
-    howpublished = {\url{https://github.com/mikel-brostrom/Yolov5_StrongSORT_OSNet}},
-    year={2022}
-}
-```
 
 ### Reference:
- - [YOLOv5](https://github.com/ultralytics/yolov5)
+ - [Yolov5-Pip](https://github.com/fcakyon/yolov5-pip)
  - [Strongsort](https://github.com/dyhBUPT/StrongSORT)
