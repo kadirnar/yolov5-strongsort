@@ -1,4 +1,3 @@
-from ast import arg
 from yolov5.utils.general import non_max_suppression, scale_coords, xyxy2xywh, increment_path
 from yolov5.utils.plots import Annotator, colors
 from yolov5.utils.torch_utils import select_device
