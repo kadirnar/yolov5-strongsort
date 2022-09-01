@@ -1,18 +1,8 @@
 import numpy as np
 import torch
-import sys
-import cv2
-import gdown
-from os.path import exists as file_exists, join
-import torchvision.transforms as transforms
-
 from .sort.nn_matching import NearestNeighborDistanceMetric
 from .sort.detection import Detection
 from .sort.tracker import Tracker
-from .deep.reid_model_factory import show_downloadeable_models, get_model_url, get_model_name
-
-from torchreid.utils import FeatureExtractor
-from torchreid.utils.tools import download_url
 from .reid_multibackend import ReIDDetectMultiBackend
 
 __all__ = ['StrongSORT']
@@ -22,7 +12,7 @@ class StrongSORT(object):
     def __init__(self, 
                  model_weights,
                  device,
-                 fp16,
+                 fp16= False,
                  max_dist=0.2,
                  max_iou_distance=0.7,
                  max_age=70, n_init=3,

@@ -11,7 +11,6 @@ from .deep.reid_model_factory import show_downloadeable_models, get_model_url, g
 
 from yolov5.utils.general import LOGGER, check_version
 from torchreid.utils import FeatureExtractor
-from torchreid.utils.tools import download_url
 
 
 def check_suffix(file='yolov5s.pt', suffix=('.pt',), msg=''):
