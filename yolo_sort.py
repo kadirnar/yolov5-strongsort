@@ -19,10 +19,7 @@ FILE = Path(__file__).resolve()
 ROOT = FILE.parents[0]  # yolov5 strongsort root directory
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 
-
 from strongsort.strong_sort import StrongSORT
-
-
 class Yolov5Sort:
     def __init__(
         self,
@@ -104,9 +101,9 @@ class Yolov5Sort:
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description='YOLO v5 video stream detector')
-    parser.add_argument('--model_path', type=str, default='yolov5s.pt', help='path to weights file')
+    parser.add_argument('--model_path', type=str, default='yolov5m.pt', help='path to weights file')
     parser.add_argument('--config_path', type=str, default='osnet_x0_25_market1501.pt', help='path to configuration file')
-    parser.add_argument('--image_size', type=int, default=320, help='size of each image dimension')
+    parser.add_argument('--image_size', type=int, default=640, help='size of each image dimension')
     parser.add_argument('--video_path', type=str, default='test.mp4', help='path to input video file')
     parser.add_argument('--confidence', type=float, default=0.5, help='minimum probability to filter weak detections')
     parser.add_argument('--device', default='cpu', help='device id (i.e. 0 or 0,1) or cpu')
@@ -121,3 +118,4 @@ def run(args):
 if __name__ == '__main__':
     args = parse_arguments()
     run(args)
+    

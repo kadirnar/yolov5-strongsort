@@ -1,19 +1,4 @@
 # base 
 yolov5
-
-# torchreid 
-Cython
-h5py
-six
-tb-nightly
-future
-yacs
-gdown
-flake8
-yapf
-isort==4.3.21
-imageio
-
-# Tracker
+torchreid
 strongsort
-easydict
