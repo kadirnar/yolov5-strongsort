@@ -20,7 +20,7 @@ ROOT = FILE.parents[0]  # yolov5 strongsort root directory
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 
 
-from strong_sort.strong_sort import StrongSORT
+from strongsort.strong_sort import StrongSORT
 
 
 class Yolov5Sort:
